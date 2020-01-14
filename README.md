@@ -163,7 +163,7 @@ quality = best
 [irc]
 address = irc.chat.twitch.tv
 network = reflex
-port = 6667
+port = 6697
 ```
 
 
