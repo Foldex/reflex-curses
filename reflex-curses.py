@@ -58,7 +58,8 @@ class Config:
         self.cp["twitch"] = {
             "client_id": "caozjg12y6hjop39wx996mxn585yqyk",
             "lang": "",
-            "query_limit": 75,
+            # API limit is 100, but API seems to choke at higher than 75
+            "results_limit": 75,
             "retry_limit": 3
         }
 
@@ -686,7 +687,7 @@ class Query:
         self.cache = []
         self.data = []
         self.query = ["topgames", None]
-        self.query_limit = config.cp.getint("twitch", "query_limit")
+        self.results_limit = config.cp.getint("twitch", "results_limit")
         self.retry_limit = config.cp.getint("twitch", "retry_limit")
         self.results = 0
 
@@ -708,17 +709,17 @@ class Query:
         url = "https://api.twitch.tv/kraken/"
 
         if req[0] == "topgames":
-            url += f"games/top?limit={self.query_limit}"
+            url += f"games/top?limit={self.results_limit}"
         elif req[0] == "game":
-            url += f"streams?limit={self.query_limit}&game={req[1]}"
+            url += f"streams?limit={self.results_limit}&game={req[1]}"
             if config.cp["twitch"]["lang"] != "":
                 url += f"&language={config.cp['twitch']['lang']}"
         elif req[0] == "channel":
             url += f"streams/?channel={req[1]}"
         elif req[0] == "stream":
-            url += f"search/streams?limit={self.query_limit}&query={req[1]}"
+            url += f"search/streams?limit={self.results_limit}&query={req[1]}"
         elif req[0] == "vods":
-            url += f"channels/{req[1]}/videos?limit={self.query_limit}"
+            url += f"channels/{req[1]}/videos?limit={self.results_limit}"
         elif req[0] == "get_id":
             url += f"users?login={req[1]}"
         else:
