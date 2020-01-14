@@ -4,6 +4,7 @@ import configparser
 import curses
 from os import path, makedirs
 from random import randint
+from shutil import copyfile
 from subprocess import Popen, PIPE, DEVNULL
 from textwrap import wrap
 from time import sleep
@@ -117,15 +118,10 @@ class Config:
         file.close()
 
     def backup(self, file_path):
-        """Takes input path, copies file contents to file.old."""
+        """Takes input path, copies file to file.old."""
         if path.isfile(file_path):
             backup_path = file_path + ".old"
-            orig = open(file_path, 'r')
-            bak = open(backup_path, 'w')
-            for line in orig:
-                bak.write(line)
-            orig.close()
-            bak.close()
+            copyfile(file_path, backup_path)
 
 
 class Interface:
