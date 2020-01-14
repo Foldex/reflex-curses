@@ -74,7 +74,7 @@ class Config:
         self.cp["irc"] = {
             "address": "irc.chat.twitch.tv",  # Address of the irc server
             "network": "reflex",              # Name of the saved network
-            "port": "6667"                    # Port of the irc server
+            "port": "6697"                    # Port of the irc server
         }
 
         # Read in Config File
