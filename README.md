@@ -159,6 +159,11 @@ retry_limit = 3
 hl_color = blue
 r_win_color = green
 quality = best
+
+[irc]
+address = irc.chat.twitch.tv
+network = reflex
+port = 6667
 ```
 
 

@@ -71,6 +71,12 @@ class Config:
             "quality": "best"        # Default quality selection
         }
 
+        self.cp["irc"] = {
+            "address": "irc.chat.twitch.tv",  # Address of the irc server
+            "network": "reflex",              # Name of the saved network
+            "port": "6667"                    # Port of the irc server
+        }
+
         # Read in Config File
         self.cp.read(self.config_dir + "/config")
 
@@ -651,22 +657,30 @@ class Keybinds:
                 Popen([config.cp["exec"]["term"],
                        config.cp["exec"]["term_flag"],
                        'weechat', '-r',
-                       (f'/server add reflex irc.chat.twitch.tv/6667;'
-                        '/set irc.server.twitch.command'
+                       (f'/server add {config.cp["irc"]["network"]} '
+                        f'{config.cp["irc"]["address"]}/{config.cp["irc"]["port"]};'
+                        '/set irc.server.{config.cp["irc"]["network"]}.command '
                         '/quote CAP REQ :twitch.tv/membership;'
-                        f'/set irc.server.reflex.nicks {nick};'
-                        f'/set irc.server.reflex.username {nick};'
-                        f'/set irc.server.reflex.realname {nick};'
-                        '/set irc.server.reflex.autojoin #' +
-                        ui.cur_page[ui.sel]['channel']['name'] + ";"
-                        '/connect reflex')])
+                        f'/set irc.server.{config.cp["irc"]["network"]}.nicks {nick};'
+                        f'/set irc.server.{config.cp["irc"]["network"]}.username {nick};'
+                        f'/set irc.server.{config.cp["irc"]["network"]}.realname {nick};'
+                        # Setting autojoin is kind of hacky
+                        # It will overwrite the saved setting for the network
+                        # TODO Alternatives for cleaner joining?
+                        f'/set irc.server.{config.cp["irc"]["network"]}.autojoin '
+                        f'#{ui.cur_page[ui.sel]["channel"]["name"]};'
+                        f'/connect {config.cp["irc"]["network"]}')])
             elif config.cp["exec"]["chat_method"] == "irssi":
                 # Irssi doesn't seem to support running commands from args
                 # And editing irssi's config file itself seems messy
                 # The best we could do is join an existing network
+                # and copy the join command to clipboard
                 Popen([config.cp["exec"]["term"],
                        config.cp["exec"]["term_flag"],
-                       'irssi', '-c', 'Twitch'])
+                       'irssi', '-c', config.cp["irc"]["network"]])
+                clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
+                clip.communicate(input=bytes(
+                    "/join #" + ui.cur_page[ui.sel]['channel']['name'], 'utf-8'))
         elif self.cur_key == config.cp["keys"]['yank']:
             ui.win_blink()
             # copy channel url to clipboard
@@ -675,9 +689,6 @@ class Keybinds:
                 clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
                 clip.communicate(input=bytes(
                     ui.cur_page[ui.sel]['channel']['url'], 'utf-8'))
-                # copy irc join command instead
-                # clip.communicate(input=bytes(
-                #     "/j #" + ui.cur_page[ui.sel]['channel']['name'], 'utf-8'))
 
 
 class Query:
