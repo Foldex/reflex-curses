@@ -643,7 +643,7 @@ class Keybinds:
                        ("https://twitch.tv/popout/"
                         f"{ui.cur_page[ui.sel]['channel']['name']}/chat")],
                       stdout=DEVNULL, stderr=DEVNULL)
-            elif config.chat_method == "weechat":
+            elif config.cp["exec"]["chat_method"] == "weechat":
                 # TODO Allow login via account oauth
                 num = randint(1000000, 99999999)
                 nick = f"justinfan{num}"
@@ -659,7 +659,7 @@ class Keybinds:
                         '/set irc.server.reflex.autojoin #' +
                         ui.cur_page[ui.sel]['channel']['name'] + ";"
                         '/connect reflex')])
-            elif config.chat_method == "irssi":
+            elif config.cp["exec"]["chat_method"] == "irssi":
                 # Irssi doesn't seem to support running commands from args
                 # And editing irssi's config file itself seems messy
                 # The best we could do is join an existing network
@@ -713,7 +713,7 @@ class Query:
         elif req[0] == "game":
             url += f"streams?limit={self.query_limit}&game={req[1]}"
             if config.cp["twitch"]["lang"] != "":
-                url += f"&language={config.lang}"
+                url += f"&language={config.cp['twitch']['lang']}"
         elif req[0] == "channel":
             url += f"streams/?channel={req[1]}"
         elif req[0] == "stream":
