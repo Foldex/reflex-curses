@@ -49,7 +49,7 @@ class Config:
         self.cp["exec"] = {
             "browser": "firefox",
             "browser_flag": "--new-window",
-            "chat_method": "browser",
+            "chat_method": "browser",  # browser/weechat/irc
             "player": "mpv",
             "term": "urxvt",
             "term_flag": "-e"
@@ -57,18 +57,18 @@ class Config:
 
         self.cp["twitch"] = {
             "client_id": "caozjg12y6hjop39wx996mxn585yqyk",
-            "lang": "",
+            "lang": "",           # Language filter
             # API limit is 100, but API seems to choke at higher than 75
-            "results_limit": 75,
-            "retry_limit": 3
+            "results_limit": 75,  # Max number of results for a query
+            "retry_limit": 3      # Max number of retries for a query
         }
 
         self.cp["ui"] = {
             # Supported Colors:
             # black/blue/cyan/green/magenta/white/yellow/red
-            "hl_color": "blue",
-            "r_win_color": "green",
-            "quality": "best"
+            "hl_color": "blue",      # Color of selected item highlight
+            "r_win_color": "green",  # Color of right window
+            "quality": "best"        # Default quality selection
         }
 
         # Read in Config File
