@@ -139,14 +139,16 @@ class Interface:
         self.screen.keypad(1)
 
         if curses.has_colors():
-            colorlist = {"black": curses.COLOR_BLACK,
-                         "blue": curses.COLOR_BLUE,
-                         "cyan": curses.COLOR_CYAN,
-                         "green": curses.COLOR_GREEN,
-                         "magenta": curses.COLOR_MAGENTA,
-                         "white": curses.COLOR_WHITE,
-                         "yellow": curses.COLOR_YELLOW,
-                         "red": curses.COLOR_RED}
+            colorlist = {
+                "black": curses.COLOR_BLACK,
+                "blue": curses.COLOR_BLUE,
+                "cyan": curses.COLOR_CYAN,
+                "green": curses.COLOR_GREEN,
+                "magenta": curses.COLOR_MAGENTA,
+                "white": curses.COLOR_WHITE,
+                "yellow": curses.COLOR_YELLOW,
+                "red": curses.COLOR_RED
+            }
 
             curses.start_color()
             curses.use_default_colors()
