@@ -91,7 +91,7 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 |           | If in Followed list, show all streams     |
 | d         | Delete channel from followed list         |
 | o         | Show only online streams in followed list |
-| c         | Open chat with chat<sub>method</sub>      |
+| c         | Open chat with chat method                |
 | y         | Yank channel url                          |
 | r         | Refresh last query                        |
 | q         | Quit                                      |
@@ -108,7 +108,9 @@ Configuration files are stored in &ldquo;~/.config/reflex-curses&rdquo;
 
 ## Config File
 
-Config file is stored in &ldquo;~/config/reflex-curses/config&rdquo; Commented Config Example:
+Config file is stored in &ldquo;~/config/reflex-curses/config&rdquo;
+
+Commented Config Example:
 
 ```
 [keys]
@@ -195,4 +197,8 @@ quality = best
 
 ## Followed List Import
 
-Reflex-Curses can also mass import a list of channel names. Place entries (one per line) in &ldquo;~/.config/reflex-curses/followed&rdquo; Reflex-Curses will resolve the Channel IDs on startup.
+Reflex-Curses can also mass import a list of channel names.
+
+Place entries (one per line) in &ldquo;~/.config/reflex-curses/followed&rdquo;
+
+Reflex-Curses will resolve the Channel IDs on startup.
