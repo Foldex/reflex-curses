@@ -107,14 +107,14 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 
 # Configuration
 
-Configuration files are stored in &ldquo;~/.config/reflex-curses&rdquo;
+Configuration files are stored in ```~/.config/reflex-curses```
 
 
 <a id="org687f105"></a>
 
 ## Config File
 
-Config file is stored in &ldquo;~/config/reflex-curses/config&rdquo;
+Config file is stored in ```~/config/reflex-curses/config```
 
 Commented Config Example:
 
@@ -205,6 +205,6 @@ quality = best
 
 Reflex-Curses can also mass import a list of channel names.
 
-Place entries (one per line) in &ldquo;~/.config/reflex-curses/followed&rdquo;
+Place entries (one per line) in ```~/.config/reflex-curses/followed```
 
 Reflex-Curses will resolve the Channel IDs on startup.
