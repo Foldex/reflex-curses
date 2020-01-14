@@ -35,6 +35,7 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 -   Custom Config File
 -   VOD Support
 -   Search by game name
+-   Top streams view
 -   Language filter (Game search only)
 -   Vim like keybinds
 -   Updated to Twitch v5 API
@@ -51,6 +52,7 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 
 ## Python
 
+-   Python 3.6
 -   python-requests
 
 
