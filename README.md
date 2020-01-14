@@ -116,85 +116,48 @@ Configuration files are stored in ```~/.config/reflex-curses```
 
 Config file is stored in ```~/config/reflex-curses/config```
 
-Commented Config Example:
+Default Config Example:
 
 ```
 [keys]
-# Add a channel to the followed list
-# If in followed view, show all streams
 add = a
-# Open chat with chat_method
 chat = c
-# Delete channel from followed list
 delete = d
-# Switch to followed view
 followed = f
-# Search by Game Name (exact)
 game = g
-# Go to initial view
 back = h
-# Move cursor down
 down = j
-# Move cursor up
 up = k
-# Enter menu or launch stream
 forward = l
-# Show only online streams in followed list
 online = o
-# quit
 quit = q
-# resend last query
 refresh = r
-# go to top games view
 top = t
-# search for streams
 search = /
-# Go to VOD view
 vods = v
-# Yank channel url
 yank = y
-# Next Page
 page+ = n
-# Previous page
 page- = p
-# Select higher quality
 qual+ = =
-# Select lower quality
 qual- = -
 
 [exec]
-# browser to open chat in
 browser = firefox
-# single arg to pass to browser
 browser_flag = --new-window
-# browser/weechat/irc
 chat_method = browser
-# default player
 player = mpv
-# default terminal
 term = urxvt
-# single arg to pass to term
 term_flag = -e
 
 [twitch]
-# twitch client id used for API requests
 client_id = caozjg12y6hjop39wx996mxn585yqyk
-# language filter (Empty means all)
 lang =
-# maximum amount of results (API limit is 100, but API seems to choke at higher than 75)
 query_limit = 75
-# maximum amount of times to retry a failed request
 retry_limit = 3
 
 [ui]
-# Supported Colors:
-# black/blue/cyan/green/magenta/white/yellow/red
-
-# currently selected item highlight color
 hl_color = blue
-# right window text color
 r_win_color = green
-# default quality
 quality = best
 ```
 
