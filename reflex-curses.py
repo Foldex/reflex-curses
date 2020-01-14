@@ -686,7 +686,6 @@ class Query:
         self.cache = []
         self.data = []
         self.query = ["topgames", None]
-        # Technically the limit is 100, but higher numbers tend to 503 requests
         self.query_limit = config.cp.getint("twitch", "query_limit")
         self.retry_limit = config.cp.getint("twitch", "retry_limit")
         self.results = 0
