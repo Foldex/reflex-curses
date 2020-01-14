@@ -684,7 +684,6 @@ class Query:
 
     def __init__(self):
         self.cache = []
-        self.client_id = "caozjg12y6hjop39wx996mxn585yqyk"
         self.data = []
         self.query = ["topgames", None]
         # Technically the limit is 100, but higher numbers tend to 503 requests
@@ -731,7 +730,7 @@ class Query:
             try:
                 headers = {
                     "Accept": "application/vnd.twitchtv.v5+json",
-                    "Client-ID": self.client_id,
+                    "Client-ID": config.cp["twitch"]["client_id"],
                 }
                 ret = requests.get(url, headers=headers, timeout=5)
                 if ret.status_code == 200:
