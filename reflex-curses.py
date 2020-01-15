@@ -427,7 +427,7 @@ class Interface:
 
     def draw_keys(self):
         """Displays keybinds for each page in the right hand window."""
-        if config.cp.getboolean("ui", "show_keys"):
+        if not config.cp.getboolean("ui", "show_keys"):
             return
 
         items = [
