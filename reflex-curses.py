@@ -20,7 +20,9 @@ class Config:
         self.config_dir = path.expanduser("~/.config/reflex-curses")
         self.followed = {}
         self.cp = configparser.ConfigParser()
+
         # TODO Move followedlist over to configparser?
+        self.init_followed_list()
 
         # Setup Default Values
         self.cp["keys"] = {
@@ -800,8 +802,6 @@ if __name__ == '__main__':
     ui = Interface()
     user_input = Keybinds()
     twitch = Query()
-
-    config.init_followed_list()
 
     try:
         twitch.get_default_view()
