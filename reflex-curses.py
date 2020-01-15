@@ -72,6 +72,7 @@ class Config:
             "hl_color": "blue",        # Color of selected item highlight
             "r_win_color": "green",    # Color of right window
             "quality": "best",         # Default quality selection
+            "show_keys": "True"        # Display Keybinds
         }
 
         self.cp["irc"] = {
@@ -423,9 +424,11 @@ class Interface:
 
     def draw_keys(self):
         """Displays keybinds for each page in the right hand window."""
+        if config.cp.getboolean("ui", "show_keys"):
+            return
+
         items = [
             "search: " + config.cp["keys"]["search"],
-            "chat: " + config.cp["keys"]["chat"],
             "followed: " + config.cp["keys"]["followed"],
             "game: " + config.cp["keys"]["game"],
             "refresh: " + config.cp["keys"]["refresh"],
