@@ -68,9 +68,10 @@ class Config:
         self.cp["ui"] = {
             # Supported Colors:
             # black/blue/cyan/green/magenta/white/yellow/red
-            "hl_color": "blue",      # Color of selected item highlight
-            "r_win_color": "green",  # Color of right window
-            "quality": "best"        # Default quality selection
+            "default_state": "games",  # Initial view: games/followed/streams
+            "hl_color": "blue",        # Color of selected item highlight
+            "r_win_color": "green",    # Color of right window
+            "quality": "best",         # Default quality selection
         }
 
         self.cp["irc"] = {
@@ -544,14 +545,11 @@ class Keybinds:
                                 ui.cur_page[ui.sel]['game']['name']],
                                "search")
         elif self.cur_key == config.cp["keys"]["back"]:
-            if ui.state != "top":
-                ui.win_blink()
-                ui.state = "top"
-                twitch.query = ["topgames", None]
-                twitch.data = twitch.cache
-                twitch.set_results()
-                ui.sel = ui.sel_cache
-                ui.page = ui.page_cache
+            ui.state = twitch.state_cache
+            twitch.data = twitch.cache
+            twitch.set_results()
+            ui.sel = ui.sel_cache
+            ui.page = ui.page_cache
         elif (self.cur_key == config.cp["keys"]["page+"] and
               twitch.results > (ui.page + 1) * ui.maxitems):
             ui.sel = 0
@@ -636,7 +634,7 @@ class Keybinds:
             twitch.request()
             twitch.set_results()
             if twitch.data:
-                if ui.state == "top":
+                if ui.state == twitch.state_cache:
                     twitch.cache = twitch.data
                 if ui.sel >= twitch.results:
                     ui.sel = 0
@@ -704,6 +702,7 @@ class Query:
         self.results_limit = config.cp.getint("twitch", "results_limit")
         self.retry_limit = config.cp.getint("twitch", "retry_limit")
         self.results = 0
+        self.state_cache = "top"
 
     def request(self, req=None, state=None):
         """Fire off request and set data json. Defaults to last request made.
@@ -716,9 +715,6 @@ class Query:
                 req[1] = quote(req[1])
         else:
             req = self.query
-
-        if state:
-            ui.set_state(state)
 
         url = "https://api.twitch.tv/kraken/"
 
@@ -749,7 +745,11 @@ class Query:
                 ret = requests.get(url, headers=headers, timeout=5)
                 if ret.status_code == 200:
                     try:
+                        self.cache = self.data
+                        self.state_cache = ui.state
                         self.data = ret.json()
+                        if state:
+                            ui.set_state(state)
                         return
                     except ValueError:
                         self.data = None
@@ -778,6 +778,19 @@ class Query:
         if self.data['_total'] > 0:
             return self.data['users'][0]['_id']
 
+    def get_default_view(self):
+        default_view = config.cp["ui"]["default_state"]
+        if default_view == "games":
+            self.request(["topgames", None], "top")
+        elif default_view == "followed":
+            self.request(["channel",
+                          ",".join(config.followed.values())],
+                         "follow")
+        elif default_view == "streams":
+            self.request(["stream", " "], "search")
+        else:
+            raise ValueError("Config Error: default_state is invalid")
+
 
 if __name__ == '__main__':
     config = Config()
@@ -788,8 +801,8 @@ if __name__ == '__main__':
     config.init_followed_list()
 
     try:
-        twitch.request(["topgames", None])
-        twitch.cache = twitch.data
+        twitch.get_default_view()
+
         while user_input.cur_key != config.cp["keys"]["quit"]:
 
             if ui.donothing:
