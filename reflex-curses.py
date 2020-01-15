@@ -785,6 +785,7 @@ class Query:
             return self.data['users'][0]['_id']
 
     def get_default_view(self):
+        """Request for default view on program start"""
         default_view = config.cp["ui"]["default_state"]
         if default_view == "games":
             self.request(["topgames", None], "top")
