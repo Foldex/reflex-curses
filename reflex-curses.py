@@ -798,6 +798,9 @@ class Query:
         else:
             raise ValueError("Config Error: default_state is invalid")
 
+        self.cache = self.data
+        self.state_cache = ui.state
+
 
 if __name__ == '__main__':
     config = Config()
