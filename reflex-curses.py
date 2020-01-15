@@ -275,7 +275,8 @@ class Interface:
         If nothing was entered, kill the window.
         Used for searching for streams and game name.
         """
-        win = curses.newwin(3, self.size[1] - 4, self.size[0] // 2 - 1, 2)
+        win = curses.newwin(3, self.size[1] // 2 - 4,
+                            self.size[0] // 2 - 1, self.size[1] // 4)
         win.border(0)
         win.addnstr(0, 3, text, self.size[0] - 4)
         win.refresh()
