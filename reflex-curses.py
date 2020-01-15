@@ -37,7 +37,8 @@ class Config:
             "online": 'o',    # Show only online streams in followed list
             "quit": 'q',      # Quit
             "refresh": 'r',   # Resend last query
-            "top": 't',       # Go to top games view
+            "t_stream": 's',  # Go to top streams view
+            "t_game": 't',    # Go to top games view
             "search": '/',    # Search for streams
             "vods": 'v',      # Go to VOD view
             "yank": 'y',      # Yank channel url
@@ -475,7 +476,8 @@ class Keybinds:
             config.cp["keys"]["online"]: self.follow_keys,
             config.cp["keys"]["refresh"]: self.query_keys,
             config.cp["keys"]["search"]: self.query_keys,
-            config.cp["keys"]["top"]: self.query_keys,
+            config.cp["keys"]["t_stream"]: self.query_keys,
+            config.cp["keys"]["t_game"]: self.query_keys,
             config.cp["keys"]["vods"]: self.query_keys,
             config.cp["keys"]["page-"]: self.move_keys,
             config.cp["keys"]["page+"]: self.move_keys,
@@ -608,7 +610,10 @@ class Keybinds:
             if string:
                 ui.win_blink()
                 twitch.request(["stream", string.decode("utf-8")], "search")
-        elif self.cur_key == config.cp["keys"]["top"]:
+        elif self.cur_key == config.cp["keys"]["t_game"]:
+            ui.win_blink()
+            twitch.request(["topgames", None], "top")
+        elif self.cur_key == config.cp["keys"]["t_stream"]:
             ui.win_blink()
             twitch.request(["stream", " "], "search")
         elif self.cur_key == config.cp["keys"]["game"]:
