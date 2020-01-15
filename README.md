@@ -80,7 +80,7 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 # Default Keybinds
 
 | Key       | Description                               |
-|--------- |----------------------------------------- |
+|---------  |-----------------------------------------  |
 | h         | Go to initial view                        |
 | j         | Move cursor down                          |
 | k         | Move cursor up                            |
@@ -88,13 +88,12 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 | n         | Next Page                                 |
 | p         | Previous page                             |
 | f         | Switch to followed view                   |
-| t         | Go to top games view                      |
+| t         | Go to top streams view                    |
 | v         | Go to VOD view                            |
 | g         | Search by Game Name (exact)               |
 | -         | Decrease quality                          |
 | =         | Increase quality                          |
-| a         | Add a channel to the followed list        |
-|           | If in Followed list, show all streams     |
+| a         | Add channel follow / Show all followed    |
 | d         | Delete channel from followed list         |
 | o         | Show only online streams in followed list |
 | c         | Open chat with chat method                |
