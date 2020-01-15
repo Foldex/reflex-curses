@@ -438,6 +438,7 @@ class Interface:
             "quit: " + config.cp["keys"]["quit"]
         ]
 
+        # TODO Cleanup
         if self.state == "follow":
             del items[1]
             items.insert(1, f"delete: {config.cp['keys']['delete']}")
@@ -449,11 +450,12 @@ class Interface:
             items.insert(1, f"add follow: {config.cp['keys']['add']}")
 
         if self.state != "top":
+            items.insert(2, f"chat: {config.cp['keys']['chat']}")
+            items.insert(len(items) - 1, f"top streams: {config.cp['keys']['t_stream']}")
+            items.insert(len(items) - 1, f"top games: {config.cp['keys']['t_game']}")
             items.insert(len(items) - 1, f"vods: {config.cp['keys']['vods']}")
             items.insert(len(items) - 1, f"yank: {config.cp['keys']['yank']}")
             items.insert(0, f"back: {config.cp['keys']['back']}")
-        else:
-            items.insert(len(items) - 1, f"top streams: {config.cp['keys']['top']}")
 
         length = len(items)
 
