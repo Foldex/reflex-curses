@@ -647,7 +647,7 @@ class Keybinds:
         if self.cur_key == chr(curses.KEY_RESIZE):
             ui.init_screen()
             ui.reset_page(True)
-        elif self.cur_key == config.cp["keys"]['chat']:
+        elif self.cur_key == config.cp["keys"]['chat'] and ui.state != "top":
             if config.cp["exec"]["chat_method"] == "browser":
                 Popen([config.cp["exec"]["browser"],
                        config.cp["exec"]["browser_flag"],
