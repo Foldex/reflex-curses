@@ -151,6 +151,7 @@ is [Here](./scripts/dstreams.sh)
 <a id="follow_keys"></a>
 ## Follow List
 | Key       | Description                               |
+|---------  |-----------------------------------------  |
 | a         | Add channel follow / Show all followed    |
 | d         | Delete channel from followed list         |
 | o         | Show only online streams in followed list |
@@ -158,6 +159,7 @@ is [Here](./scripts/dstreams.sh)
 <a id="misc_keys"></a>
 ## Misc
 | Key       | Description                               |
+|---------  |-----------------------------------------  |
 | c         | Open chat with chat method                |
 | y         | Yank channel url                          |
 | q         | Quit                                      |
