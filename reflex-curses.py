@@ -834,17 +834,19 @@ class Query:
                     "Client-ID": config.cp["twitch"]["client_id"],
                 }
                 ret = requests.get(url, headers=headers, timeout=5)
-                if ret.status_code == 200:
-                    try:
-                        self.cache = self.data
-                        self.data = ret.json()
-                        if ui:
-                            self.state_cache = ui.state
-                            if state:
-                                ui.set_state(state)
-                        return
-                    except ValueError:
-                        self.data = None
+                if ret.status_code != 200:
+                    continue
+
+                try:
+                    self.cache = self.data
+                    self.data = ret.json()
+                    if ui:
+                        self.state_cache = ui.state
+                        if state:
+                            ui.set_state(state)
+                    return
+                except ValueError:
+                    self.data = None
             except requests.exceptions.RequestException:
                 sleep(3)
         self.data = None
