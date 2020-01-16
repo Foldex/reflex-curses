@@ -579,7 +579,6 @@ class Keybinds:
                     "-p", config.cp["exec"]["player"],
                     url, ui.quality[ui.cur_quality]])
             elif ui.state == "top":
-                ui.win_blink()
                 twitch.request(["game",
                                 ui.cur_page[ui.sel]['game']['name']],
                                "search")
@@ -624,7 +623,6 @@ class Keybinds:
             """Go to the followed channels page"""
             if (user_input.cur_key == config.cp["keys"]["followed"] and ui.state != "follow") or (
                     user_input.cur_key == config.cp["keys"]["online"] and ui.f_filter == "all"):
-                ui.win_blink()
                 twitch.request(["channel",
                                 ",".join(config.followed.values())],
                                "follow")
@@ -653,11 +651,9 @@ class Keybinds:
                 if ui.cur_page:
                     del config.followed[ui.cur_page[ui.sel]]
             elif ui.f_filter == "online":
-                ui.win_blink()
                 if ui.cur_page:
                     del config.followed[ui.cur_page[ui.sel]
                                         ['channel']['name']]
-                    ui.win_blink()
                     twitch.query = [
                         "channel", ",".join(
                             config.followed.values())]
@@ -669,12 +665,10 @@ class Keybinds:
 
         def top_games_view(self):
             """Go to top games page"""
-            ui.win_blink()
             twitch.request(["topgames", None], "top")
 
         def top_streams_view(self):
             """Go to top streams page"""
-            ui.win_blink()
             twitch.request(["stream", " "], "search")
 
         def vods_view(self):
@@ -683,12 +677,10 @@ class Keybinds:
                 return
 
             if ui.state == "follow" and ui.f_filter == "all":
-                ui.win_blink()
                 twitch.request(["vods",
                                 str(config.followed[ui.cur_page[ui.sel]])],
                                "vods")
             else:
-                ui.win_blink()
                 twitch.request(["vods",
                                 str(ui.cur_page[ui.sel]['channel']['_id'])],
                                "vods")
@@ -697,19 +689,16 @@ class Keybinds:
             """Search by game name (exact match)"""
             string = ui.prompt("Enter Game")
             if string:
-                ui.win_blink()
                 twitch.request(["game", string.decode("utf-8")], "search")
 
         def search(self):
             """Search for streams"""
             string = ui.prompt("Enter Search Query")
             if string:
-                ui.win_blink()
                 twitch.request(["stream", string.decode("utf-8")], "search")
 
         def refresh(self):
             """Resend last request and reload results"""
-            ui.win_blink()
             twitch.request()
             twitch.set_results()
             if twitch.data:
@@ -796,6 +785,9 @@ class Query:
     def request(self, req=None, state=None):
         """Fire off request and set data json. Optionally sets the state.
         Retry up to X times on fail."""
+
+        if ui:
+            ui.win_blink()
 
         self.prep_url(req)
 
