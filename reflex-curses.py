@@ -604,7 +604,6 @@ class Keybinds:
                 ui.sel = 0
                 ui.page -= 1
 
-
     class Quality:
         """Keys used to select the quality of the stream."""
 
@@ -617,7 +616,6 @@ class Keybinds:
             """Select next lowest quality"""
             if ui.cur_quality > 0:
                 ui.cur_quality -= 1
-
 
     class Follow:
         """Keys used to visit or interact with followed channels."""
@@ -665,7 +663,6 @@ class Keybinds:
                             config.followed.values())]
                     user_input.cur_key = config.cp["keys"]["refresh"]
                     user_input.Request.refresh()
-
 
     class Request:
         """Keys used to query twitch"""
