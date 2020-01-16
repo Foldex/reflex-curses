@@ -73,6 +73,7 @@ class Config:
             # black/blue/cyan/green/magenta/white/yellow/red
             "default_state": "games",  # Initial view: games/followed/streams
             "hl_color": "blue",        # Color of selected item highlight
+            "l_win_color": "white",    # Color of left window
             "r_win_color": "green",    # Color of right window
             "quality": "best",         # Default quality selection
             "show_keys": "True"        # Display Keybinds
@@ -154,15 +155,16 @@ class Interface:
 
             curses.start_color()
             curses.use_default_colors()
-            # highlighted item color
             curses.init_pair(1, colorlist[config.cp["ui"]["hl_color"]], -1)
-            # right win color
             curses.init_pair(2, colorlist[config.cp["ui"]["r_win_color"]], -1)
+            curses.init_pair(3, colorlist[config.cp["ui"]["l_win_color"]], -1)
             self.hl_1 = curses.color_pair(1)
             self.hl_2 = curses.color_pair(2)
+            self.hl_3 = curses.color_pair(3)
         else:
             self.hl_1 = 0
             self.hl_2 = 0
+            self.hl_3 = 0
 
         self.state = "top"
         self.f_filter = "online"
@@ -323,7 +325,7 @@ class Interface:
                                        curses.A_UNDERLINE | self.hl_1)
                 else:
                     self.win_l.addnstr(index * 2 + 2, 2,
-                                       string, self.maxlen)
+                                       string, self.maxlen, self.hl_3)
             index += 1
 
         # Headers
