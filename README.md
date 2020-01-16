@@ -169,14 +169,14 @@ is [Here](./scripts/dstreams.sh)
 
 # Configuration
 
-Configuration files are stored in ```~/.config/reflex-curses```
+Configuration files are stored in `~/.config/reflex-curses`
 
 
 <a id="conf_file"></a>
 
 ## Config File
 
-Config file is stored in ```~/config/reflex-curses/config```
+Config file is stored in `~/.config/reflex-curses/config`
 
 Default Config Example:
 
@@ -224,6 +224,7 @@ hl_color = blue
 l_win_color = white
 r_win_color = green
 quality = best
+show_borders = True
 show_keys = True
 
 [irc]
