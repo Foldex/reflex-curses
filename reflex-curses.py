@@ -884,6 +884,32 @@ class Query:
         self.cache = self.data
         self.state_cache = ui.state
 
+class CLI:
+    """Commands to be run without the TUI interface"""
+    def __init__(self):
+        self.cur_arg = sys.argv[1]
+
+        self.commands = {
+            "-f": self.get_online_followed
+        }
+
+    def arg_run(self):
+        """Gets the passed arg, then calls the respective function."""
+
+        if self.cur_arg in self.commands:
+            self.commands[self.cur_arg]()
+        else:
+            print(f"Invalid Argument Passed: {self.cur_arg}")
+
+    def get_online_followed(self):
+        """Prints any online streams in the followed list"""
+        twitch.request(["channel", ",".join(config.followed.values())],
+                       "follow")
+        if twitch.data:
+            for stream in sorted(twitch.data["streams"],
+                                 key=lambda i: str(i['channel']['display_name']).lower()):
+                print(stream['channel']['display_name'])
+
 
 if __name__ == '__main__':
 
@@ -892,15 +918,8 @@ if __name__ == '__main__':
     ui = None  # Dummy init for cli invocation
 
     if len(sys.argv) >= 2:
-
-        if sys.argv[1] == "-f":
-            twitch.request(["channel", ",".join(config.followed.values())],
-                           "follow")
-            if twitch.data:
-                for stream in sorted(twitch.data["streams"],
-                                     key=lambda i: str(i['channel']['display_name']).lower()):
-                    print(stream['channel']['display_name'])
-
+        cli = CLI()
+        cli.arg_run()
         sys.exit()
 
     ui = Interface()
