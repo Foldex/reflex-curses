@@ -689,12 +689,12 @@ class Keybinds:
                 ui.win_blink()
                 twitch.request(["vods",
                                 str(config.followed[ui.cur_page[ui.sel]])],
-                                "vods")
+                               "vods")
             else:
                 ui.win_blink()
                 twitch.request(["vods",
                                 str(ui.cur_page[ui.sel]['channel']['_id'])],
-                                "vods")
+                               "vods")
 
         def game_search(self):
             """Search by game name (exact match)"""
