@@ -459,6 +459,8 @@ class Interface:
             items.insert(len(items) - 1, f"vods: {config.cp['keys']['vods']}")
             items.insert(len(items) - 1, f"yank: {config.cp['keys']['yank']}")
             items.insert(0, f"back: {config.cp['keys']['back']}")
+        else:
+            items.insert(len(items) - 2, f"top streams: {config.cp['keys']['t_stream']}")
 
         length = len(items)
 
