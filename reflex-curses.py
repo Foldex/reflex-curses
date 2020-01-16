@@ -2,6 +2,7 @@
 
 import configparser
 import curses
+import sys
 from os import path, makedirs
 from random import randint
 from shutil import copyfile
@@ -754,10 +755,11 @@ class Query:
                 if ret.status_code == 200:
                     try:
                         self.cache = self.data
-                        self.state_cache = ui.state
                         self.data = ret.json()
-                        if state:
-                            ui.set_state(state)
+                        if ui:
+                            self.state_cache = ui.state
+                            if state:
+                                ui.set_state(state)
                         return
                     except ValueError:
                         self.data = None
@@ -805,10 +807,25 @@ class Query:
 
 
 if __name__ == '__main__':
+
     config = Config()
+    twitch = Query()
+    ui = None  # Dummy init for cli invocation
+
+    if len(sys.argv) >= 2:
+
+        if sys.argv[1] == "-f":
+            twitch.request(["channel", ",".join(config.followed.values())],
+                           "follow")
+            if twitch.data:
+                for stream in sorted(twitch.data["streams"],
+                                     key=lambda i: str(i['channel']['display_name']).lower()):
+                    print(stream['channel']['display_name'])
+
+        sys.exit()
+
     ui = Interface()
     user_input = Keybinds()
-    twitch = Query()
 
     try:
         twitch.get_default_view()
