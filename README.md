@@ -2,27 +2,58 @@
   <img src="/reflex.png" title="reflex-curses"/>
 </p>
 
-- [Description](#orgb8169a5)
-- [Changes](#org1bc8f9b)
-- [Dependencies](#orgf44b078)
-  - [Python](#org88c3222)
-  - [External](#orgdad08ea)
-  - [Optional](#org21b258a)
-- [Default Keybinds](#org348d4f4)
-- [Configuration](#orgab3d14f)
-  - [Config File](#org687f105)
-  - [Followed List Import](#org6d89dec)
+- [Description](#desc)
+- [Usage](#usage)
+  - [TUI](#tui)
+  - [CLI](#cli)
+- [Changes](#changes)
+- [Dependencies](#depend)
+  - [Python](#python_dep)
+  - [External](#ext_dep)
+  - [Optional](#opt_dep)
+- [Default Keybinds](#def_keys)
+  - [Page Navigation](#page_keys)
+  - [Swap Views](#views_keys)
+  - [Search](#search_keys)
+  - [Quality Select](#quality_keys)
+  - [Follow List](#follow_keys)
+  - [Misc List](#misc_keys)
+- [Configuration](#config)
+  - [Config File](#conf_file)
+  - [Followed List Import](#follow_import)
 
 
-
-<a id="orgb8169a5"></a>
+<a id="desc"></a>
 
 # Description
 
 Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curses) with added features.
 
+<a id="usage"></a>
 
-<a id="org1bc8f9b"></a>
+# Usage
+
+<a id="tui"></a>
+
+## TUI
+
+Simply run `reflex-curses.py` in your terminal.
+
+<a id="cli"></a>
+
+## CLI
+
+Reflex-curses also supports running one off commands without the interactive interface.
+
+Currently only the -f flag is supported.
+
+`reflex-curses.py -f`:
+
+Output followed streams that are online (one per line). An example dmenu script
+is [Here](./scripts/dstreams.sh)
+
+
+<a id="changes"></a>
 
 # Changes
 
@@ -41,14 +72,15 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 -   Updated to Twitch v5 API
 -   Color support
 -   Fixed crashing with super small terminal resizing
+-   Run one off cli commands 
 
 
-<a id="orgf44b078"></a>
+<a id="depend"></a>
 
 # Dependencies
 
 
-<a id="org88c3222"></a>
+<a id="python_dep"></a>
 
 ## Python
 
@@ -56,7 +88,7 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 -   python-requests
 
 
-<a id="orgdad08ea"></a>
+<a id="ext_dep"></a>
 
 ## External
 
@@ -67,7 +99,7 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 -   setsid (detach player from terminal)
 
 
-<a id="org21b258a"></a>
+<a id="opt_dep"></a>
 
 ## Optional
 
@@ -75,41 +107,70 @@ Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curs
 -   weechat / irssi (chat)
 
 
-<a id="org348d4f4"></a>
+<a id="def_keys"></a>
 
 # Default Keybinds
 
+<a id="page_keys"></a>
+## Page Navigation
 | Key       | Description                               |
 |---------  |-----------------------------------------  |
-| h         | Go to initial view                        |
+| h         | Go back                                   |
 | j         | Move cursor down                          |
 | k         | Move cursor up                            |
 | l / Enter | Enter menu or launch stream               |
 | n         | Next Page                                 |
 | p         | Previous page                             |
-| f         | Switch to followed view                   |
-| t         | Go to top streams view                    |
+| r         | Refresh last query                        |
+
+<a id="view_keys"></a>
+## Swap Views
+| Key       | Description                               |
+|---------  |-----------------------------------------  |
+| f         | Go to followed view                       |
+| s         | Go to top streams view                    |
+| t         | Go to top games view                      |
 | v         | Go to VOD view                            |
+
+<a id="search_keys"></a>
+## Search
+| Key       | Description                               |
+|---------  |-----------------------------------------  |
+| /         | General Search                            |
 | g         | Search by Game Name (exact)               |
+
+
+<a id="quality_keys"></a>
+## Quality Selection
+| Key       | Description                               |
+|---------  |-----------------------------------------  |
 | -         | Decrease quality                          |
 | =         | Increase quality                          |
+
+
+<a id="follow_keys"></a>
+## Follow List
+| Key       | Description                               |
 | a         | Add channel follow / Show all followed    |
 | d         | Delete channel from followed list         |
 | o         | Show only online streams in followed list |
+
+<a id="misc_keys"></a>
+## Misc
+| Key       | Description                               |
 | c         | Open chat with chat method                |
 | y         | Yank channel url                          |
-| r         | Refresh last query                        |
 | q         | Quit                                      |
 
 
-<a id="orgab3d14f"></a>
+<a id="config"></a>
 
 # Configuration
 
 Configuration files are stored in ```~/.config/reflex-curses```
 
 
-<a id="org687f105"></a>
+<a id="conf_file"></a>
 
 ## Config File
 
@@ -131,7 +192,8 @@ forward = l
 online = o
 quit = q
 refresh = r
-top = t
+t_stream = s
+t_game = t
 search = /
 vods = v
 yank = y
@@ -150,14 +212,17 @@ term_flag = -e
 
 [twitch]
 client_id = caozjg12y6hjop39wx996mxn585yqyk
-lang =
-query_limit = 75
+lang = 
+results_limit = 75
 retry_limit = 3
 
 [ui]
+default_state = games
 hl_color = blue
+l_win_color = white
 r_win_color = green
 quality = best
+show_keys = True
 
 [irc]
 address = irc.chat.twitch.tv
@@ -166,12 +231,12 @@ port = 6697
 ```
 
 
-<a id="org6d89dec"></a>
+<a id="follow_import"></a>
 
 ## Followed List Import
 
 Reflex-Curses can also mass import a list of channel names.
 
-Place entries (one per line) in ```~/.config/reflex-curses/followed```
+Place entries (one per line) in `~/.config/reflex-curses/followed`
 
 Reflex-Curses will resolve the Channel IDs on startup.
