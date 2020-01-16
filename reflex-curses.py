@@ -791,12 +791,40 @@ class Query:
         self.retry_limit = config.cp.getint("twitch", "retry_limit")
         self.results = 0
         self.state_cache = "top"
+        self.url = ""
 
     def request(self, req=None, state=None):
-        """Fire off request and set data json. Defaults to last request made.
-        Optionally sets the state.
+        """Fire off request and set data json. Optionally sets the state.
         Retry up to X times on fail."""
 
+        self.prep_url(req)
+
+        for _ in range(self.retry_limit):
+            try:
+                headers = {
+                    "Accept": "application/vnd.twitchtv.v5+json",
+                    "Client-ID": config.cp["twitch"]["client_id"],
+                }
+                ret = requests.get(self.url, headers=headers, timeout=5)
+                if ret.status_code != 200:
+                    continue
+
+                try:
+                    self.cache = self.data
+                    self.data = ret.json()
+                    if ui:
+                        self.state_cache = ui.state
+                        if state:
+                            ui.set_state(state)
+                    return
+                except ValueError:
+                    self.data = None
+            except requests.exceptions.RequestException:
+                sleep(3)
+        self.data = None
+
+    def prep_url(self, req=None):
+        """Prepares the url for the request. Defaults to last request made"""
         if req:
             self.query = req
             if req[1]:
@@ -823,30 +851,7 @@ class Query:
         else:
             raise ValueError("Invalid Type Passed")
 
-        # TODO Cleanup
-        for _ in range(self.retry_limit):
-            try:
-                headers = {
-                    "Accept": "application/vnd.twitchtv.v5+json",
-                    "Client-ID": config.cp["twitch"]["client_id"],
-                }
-                ret = requests.get(url, headers=headers, timeout=5)
-                if ret.status_code != 200:
-                    continue
-
-                try:
-                    self.cache = self.data
-                    self.data = ret.json()
-                    if ui:
-                        self.state_cache = ui.state
-                        if state:
-                            ui.set_state(state)
-                    return
-                except ValueError:
-                    self.data = None
-            except requests.exceptions.RequestException:
-                sleep(3)
-        self.data = None
+        self.url = url
 
     def set_results(self):
         """Count the number of results from the request."""
