@@ -749,7 +749,7 @@ class Query:
             raise ValueError("Invalid Type Passed")
 
         # TODO Cleanup
-        for i in range(self.retry_limit):
+        for _ in range(self.retry_limit):
             try:
                 headers = {
                     "Accept": "application/vnd.twitchtv.v5+json",
