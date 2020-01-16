@@ -302,30 +302,32 @@ class Interface:
         index = 0
 
         for i in self.cur_page:
-            if index < self.maxitems:
-                if self.state == "top":
-                    string = str(i['game']['name'])
-                elif self.state == "vods":
-                    string = str(i['title']).replace("\n", "")
-                    # truncate long vod titles
-                    if len(string) > self.maxlen // 2:
-                        string = string[:self.maxlen // 2] + "..."
-                    string += " - " + str(i['game'])
-                elif (self.state == "search" or (
-                        self.state == "follow" and self.f_filter == "online")):
-                    string = str(i['channel']['display_name'])
-                    if twitch.query[0] != "game":
-                        string += " - " + str(i['game'])
-                elif self.state == "follow" and self.f_filter == "all":
-                    string = str(i)
+            if index >= self.maxitems:
+                break
 
-                if index == self.sel:
-                    self.win_l.addnstr(index * 2 + 2, 2,
-                                       string, self.maxlen,
-                                       curses.A_UNDERLINE | self.hl_1)
-                else:
-                    self.win_l.addnstr(index * 2 + 2, 2,
-                                       string, self.maxlen, self.hl_3)
+            if self.state == "top":
+                string = str(i['game']['name'])
+            elif self.state == "vods":
+                string = str(i['title']).replace("\n", "")
+                # truncate long vod titles
+                if len(string) > self.maxlen // 2:
+                    string = string[:self.maxlen // 2] + "..."
+                string += " - " + str(i['game'])
+            elif (self.state == "search" or (
+                    self.state == "follow" and self.f_filter == "online")):
+                string = str(i['channel']['display_name'])
+                if twitch.query[0] != "game":
+                    string += " - " + str(i['game'])
+            elif self.state == "follow" and self.f_filter == "all":
+                string = str(i)
+
+            if index == self.sel:
+                self.win_l.addnstr(index * 2 + 2, 2,
+                                   string, self.maxlen,
+                                   curses.A_UNDERLINE | self.hl_1)
+            else:
+                self.win_l.addnstr(index * 2 + 2, 2,
+                                   string, self.maxlen, self.hl_3)
             index += 1
 
         # Headers
@@ -358,72 +360,76 @@ class Interface:
         index = 0
 
         for i in self.cur_page:
-            if index < self.maxitems:
-                if index == self.sel:
-                    if self.state == "top":
-                        self.win_r.addnstr(2, 3,
-                                           f"Viewers: {i['viewers']}",
-                                           self.maxlen, self.hl_2)
-                        self.win_r.addnstr(3, 3,
-                                           f"Channels: {i['channels']}",
-                                           self.maxlen, self.hl_2)
-                    elif self.state == "vods":
-                        m, s = divmod(i['length'], 60)
-                        h, m = divmod(m, 60)
+            if index >= self.maxitems:
+                break
 
-                        self.win_r.addnstr(2, 3,
-                                           f"Date: {i['created_at']}",
-                                           self.maxlen, self.hl_2)
-                        self.win_r.addnstr(3, 3,
-                                           f"Views: {i['views']}",
-                                           self.maxlen, self.hl_2)
-                        self.win_r.addnstr(4, 3,
-                                           f"Length: {h:02}:{m:02}:{s:02}",
-                                           self.maxlen, self.hl_2)
-                        self.win_r.addnstr(5, 3,
-                                           f"Status: {i['status']}",
-                                           self.maxlen, self.hl_2)
-                    elif (self.state == "search" or
-                          (self.state == "follow" and
-                           self.f_filter == "online")):
-                        self.win_r.addnstr(
-                            self.size[0] - 3, 2,
-                            "quality: " +
-                            config.cp["keys"]['qual-'] +
-                            config.cp["keys"]['qual+'],
-                            self.maxlen)
-                        self.win_r.addnstr(self.size[0] - 2, 3,
-                                           self.quality[self.cur_quality],
-                                           self.maxlen)
-                        self.win_r.addnstr(2, 3,
-                                           str(i['channel']['url']),
-                                           self.maxlen, self.hl_2)
-                        self.win_r.addnstr(4, 3,
-                                           f"Language: {i['channel']['language']}",
-                                           self.maxlen, self.hl_2)
-                        self.win_r.addnstr(5, 3,
-                                           f"Viewers: {i['viewers']}",
-                                           self.maxlen, self.hl_2)
-                        self.win_r.addnstr(6, 3,
-                                           "Status:",
-                                           self.maxlen, self.hl_2)
-                        status = wrap(str(i['channel']['status']),
-                                      self.size[1] // 2 - 6)
-                        l_num = 7
-                        for line in status:
-                            if l_num >= self.size[0] - 4:
-                                break
-                            self.win_r.addstr(l_num, 4,
-                                              line,
-                                              self.hl_2)
-                            l_num += 1
-                        # TODO Clean up
-                        # Lazy way of setting cursor position to display stderr
-                        # output from streamlink. A large enough error message
-                        # will vomit on the screen
-                        self.win_r.addstr(l_num, 4,
-                                          "",
-                                          self.hl_2)
+            if index != self.sel:
+                index += 1
+                continue
+
+            if self.state == "top":
+                self.win_r.addnstr(2, 3,
+                                   f"Viewers: {i['viewers']}",
+                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(3, 3,
+                                   f"Channels: {i['channels']}",
+                                   self.maxlen, self.hl_2)
+            elif self.state == "vods":
+                m, s = divmod(i['length'], 60)
+                h, m = divmod(m, 60)
+
+                self.win_r.addnstr(2, 3,
+                                   f"Date: {i['created_at']}",
+                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(3, 3,
+                                   f"Views: {i['views']}",
+                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(4, 3,
+                                   f"Length: {h:02}:{m:02}:{s:02}",
+                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(5, 3,
+                                   f"Status: {i['status']}",
+                                   self.maxlen, self.hl_2)
+            elif (self.state == "search" or (self.state == "follow" and
+                                             self.f_filter == "online")):
+                self.win_r.addnstr(
+                    self.size[0] - 3, 2,
+                    "quality: " +
+                    config.cp["keys"]['qual-'] +
+                    config.cp["keys"]['qual+'],
+                    self.maxlen)
+                self.win_r.addnstr(self.size[0] - 2, 3,
+                                   self.quality[self.cur_quality],
+                                   self.maxlen)
+                self.win_r.addnstr(2, 3,
+                                   str(i['channel']['url']),
+                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(4, 3,
+                                   f"Language: {i['channel']['language']}",
+                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(5, 3,
+                                   f"Viewers: {i['viewers']}",
+                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(6, 3,
+                                   "Status:",
+                                   self.maxlen, self.hl_2)
+                status = wrap(str(i['channel']['status']),
+                              self.size[1] // 2 - 6)
+                l_num = 7
+                for line in status:
+                    if l_num >= self.size[0] - 4:
+                        break
+                    self.win_r.addstr(l_num, 4,
+                                      line,
+                                      self.hl_2)
+                    l_num += 1
+                    # TODO Clean up
+                    # Lazy way of setting cursor position to display stderr
+                    # output from streamlink. A large enough error message
+                    # will vomit on the screen
+                self.win_r.addstr(l_num, 4,
+                                  "",
+                                  self.hl_2)
             index += 1
 
         self.win_r.refresh()
