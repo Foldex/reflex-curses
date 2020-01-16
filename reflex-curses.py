@@ -462,11 +462,13 @@ class Interface:
 
         length = len(items)
 
-        for i in items:
-            self.win_r.addnstr(self.size[0] - (length + 1),
-                               self.size[1] // 2 - (len(i) + 2),
-                               i, self.maxlen)
-            length -= 1
+        # only draw keys if it takes up less than half the vertical space
+        if self.size[0] // 2 > length:
+            for i in items:
+                self.win_r.addnstr(self.size[0] - (length + 1),
+                                   self.size[1] // 2 - (len(i) + 2),
+                                   i, self.maxlen)
+                length -= 1
 
 
 class Keybinds:
