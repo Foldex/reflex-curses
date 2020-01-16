@@ -478,34 +478,43 @@ class Keybinds:
 
     def __init__(self):
         self.cur_key = 0
+        self.Navigation = self.Navigation()
+        self.Quality = self.Quality()
+        self.Follow = self.Follow()
+        self.Request = self.Request()
+        self.Misc = self.Misc()
+
         self.keybinds = {
-            config.cp["keys"]["add"]: self.follow_keys,
-            config.cp["keys"]["delete"]: self.follow_keys,
-            config.cp["keys"]["followed"]: self.follow_keys,
-            config.cp["keys"]["game"]: self.query_keys,
-            config.cp["keys"]["back"]: self.move_keys,
-            config.cp["keys"]["down"]: self.move_keys,
-            config.cp["keys"]["up"]: self.move_keys,
-            config.cp["keys"]["forward"]: self.move_keys,
-            config.cp["keys"]["online"]: self.follow_keys,
-            config.cp["keys"]["refresh"]: self.query_keys,
-            config.cp["keys"]["search"]: self.query_keys,
-            config.cp["keys"]["t_stream"]: self.query_keys,
-            config.cp["keys"]["t_game"]: self.query_keys,
-            config.cp["keys"]["vods"]: self.query_keys,
-            config.cp["keys"]["page-"]: self.move_keys,
-            config.cp["keys"]["page+"]: self.move_keys,
-            config.cp["keys"]["qual-"]: self.qual_keys,
-            config.cp["keys"]["qual+"]: self.qual_keys,
-            config.cp["keys"]["chat"]: self.misc_keys,
-            config.cp["keys"]["yank"]: self.misc_keys,
-            chr(curses.KEY_ENTER): self.move_keys,
-            chr(curses.KEY_RESIZE): self.misc_keys
+            config.cp["keys"]["back"]: self.Navigation.back,
+            config.cp["keys"]["down"]: self.Navigation.down,
+            config.cp["keys"]["forward"]: self.Navigation.forward,
+            config.cp["keys"]["page+"]: self.Navigation.page_next,
+            config.cp["keys"]["page-"]: self.Navigation.page_prev,
+            config.cp["keys"]["up"]: self.Navigation.up,
+            chr(curses.KEY_ENTER): self.Navigation.forward,
+
+            config.cp["keys"]["qual+"]: self.Quality.qual_next,
+            config.cp["keys"]["qual-"]: self.Quality.qual_prev,
+
+            config.cp["keys"]["add"]: self.Follow.add,
+            config.cp["keys"]["delete"]: self.Follow.delete,
+            config.cp["keys"]["followed"]: self.Follow.follow_view,
+            config.cp["keys"]["online"]: self.Follow.follow_view,
+
+            config.cp["keys"]["game"]: self.Request.game_search,
+            config.cp["keys"]["refresh"]: self.Request.refresh,
+            config.cp["keys"]["search"]: self.Request.search,
+            config.cp["keys"]["t_game"]: self.Request.top_games_view,
+            config.cp["keys"]["t_stream"]: self.Request.top_streams_view,
+            config.cp["keys"]["vods"]: self.Request.vods_view,
+
+            config.cp["keys"]["chat"]: self.Misc.exec_chat,
+            config.cp["keys"]["yank"]: self.Misc.exec_yank,
+            chr(curses.KEY_RESIZE): self.Misc.resize
         }
 
     def input(self):
         """Gets the pressed key, then calls the respective function."""
-        # TODO Cleanup
         self.cur_key = chr(ui.screen.getch())
 
         # Disable input while term is too small
@@ -518,23 +527,29 @@ class Keybinds:
         else:
             ui.donothing = True
 
-    def move_keys(self):
+    class Navigation:
         """Keys used for moving the cursor and launching streamlink."""
-        if self.cur_key == config.cp["keys"]["down"]:
+
+        def down(self):
+            """Move cursor down"""
             if ui.sel + ui.page * ui.maxitems + 1 < twitch.results:
                 if ui.sel + 1 == ui.maxitems:
                     ui.page += 1
                     ui.sel = 0
                 else:
                     ui.sel += 1
-        elif self.cur_key == config.cp["keys"]["up"]:
+
+        def up(self):
+            """Move cursor up"""
             if ui.sel == 0 and ui.page > 0:
                 ui.page -= 1
                 ui.sel = ui.maxitems - 1
             elif ui.sel > 0:
                 ui.sel -= 1
-        elif self.cur_key in (config.cp["keys"]["forward"],
-                              chr(curses.KEY_ENTER)):
+
+
+        def forward(self):
+            """Enter menu or launch stream"""
             if (ui.state in ("search", "vods") or (
                     ui.state == "follow" and ui.f_filter == "online")):
                 ui.win_blink()
@@ -557,31 +572,59 @@ class Keybinds:
                 twitch.request(["game",
                                 ui.cur_page[ui.sel]['game']['name']],
                                "search")
-        elif self.cur_key == config.cp["keys"]["back"]:
+
+        def back(self):
+            """Go to cached page"""
             ui.state = twitch.state_cache
             twitch.data = twitch.cache
             twitch.set_results()
             ui.sel = ui.sel_cache
             ui.page = ui.page_cache
-        elif (self.cur_key == config.cp["keys"]["page+"] and
-              twitch.results > (ui.page + 1) * ui.maxitems):
-            ui.sel = 0
-            ui.page += 1
-        elif self.cur_key == config.cp["keys"]["page-"] and ui.page > 0:
-            ui.sel = 0
-            ui.page -= 1
 
-    def qual_keys(self):
+        def page_next(self):
+            """Go to next page"""
+            if twitch.results > (ui.page + 1) * ui.maxitems:
+                ui.sel = 0
+                ui.page += 1
+
+        def page_prev(self):
+            """Go to prev page"""
+            if ui.page > 0:
+                ui.sel = 0
+                ui.page -= 1
+
+
+    class Quality:
         """Keys used to select the quality of the stream."""
-        if self.cur_key == config.cp["keys"]["qual-"] and ui.cur_quality > 0:
-            ui.cur_quality -= 1
-        elif (self.cur_key == config.cp["keys"]["qual+"] and
-              ui.cur_quality < len(ui.quality) - 1):
-            ui.cur_quality += 1
 
-    def follow_keys(self):
+        def qual_next(self):
+            """Select next highest quality"""
+            if ui.cur_quality < len(ui.quality) - 1:
+                ui.cur_quality += 1
+
+        def qual_prev(self):
+            """Select next lowest quality"""
+            if ui.cur_quality > 0:
+                ui.cur_quality -= 1
+
+
+    class Follow:
         """Keys used to visit or interact with followed channels."""
-        if self.cur_key == config.cp["keys"]["add"]:
+
+        def follow_view(self):
+            """Go to the followed channels page"""
+            if (user_input.cur_key == config.cp["keys"]["followed"] and ui.state != "follow") or (
+                    user_input.cur_key == config.cp["keys"]["online"] and ui.f_filter == "all"):
+                ui.win_blink()
+                twitch.request(["channel",
+                                ",".join(config.followed.values())],
+                               "follow")
+                ui.f_filter = "online"
+
+        def add(self):
+            """Add a channel to the followed list
+            Or show all followed channels
+            """
             if ui.state == "search":
                 if ui.cur_page[ui.sel]['channel']['name'] not in config.followed:
                     ui.win_blink()
@@ -590,14 +633,12 @@ class Keybinds:
             elif ui.state == "follow" and ui.f_filter != "all":
                 ui.f_filter = "all"
                 ui.reset_page()
-        elif (self.cur_key == config.cp["keys"]["followed"] and ui.state != "follow") or (
-                self.cur_key == config.cp["keys"]["online"] and ui.f_filter == "all"):
-            ui.win_blink()
-            twitch.request(["channel",
-                            ",".join(config.followed.values())],
-                           "follow")
-            ui.f_filter = "online"
-        elif self.cur_key == config.cp["keys"]["delete"] and ui.state == "follow":
+
+        def delete(self):
+            """Remove channel from followed list"""
+            if ui.state != "follow":
+                return
+
             if ui.f_filter == "all":
                 ui.win_blink()
                 if ui.cur_page:
@@ -611,38 +652,55 @@ class Keybinds:
                     twitch.query = [
                         "channel", ",".join(
                             config.followed.values())]
-                    self.cur_key = config.cp["keys"]["refresh"]
-                    self.query_keys()
+                    user_input.cur_key = config.cp["keys"]["refresh"]
+                    user_input.Request.refresh()
 
-    def query_keys(self):
+
+    class Request:
         """Keys used to query twitch"""
-        if self.cur_key == config.cp["keys"]["search"]:
-            string = ui.prompt("Enter Search Query")
-            if string:
-                ui.win_blink()
-                twitch.request(["stream", string.decode("utf-8")], "search")
-        elif self.cur_key == config.cp["keys"]["t_game"]:
+
+        def top_games_view(self):
+            """Go to top games page"""
             ui.win_blink()
             twitch.request(["topgames", None], "top")
-        elif self.cur_key == config.cp["keys"]["t_stream"]:
+
+        def top_streams_view(self):
+            """Go to top streams page"""
             ui.win_blink()
             twitch.request(["stream", " "], "search")
-        elif self.cur_key == config.cp["keys"]["game"]:
+
+        def vods_view(self):
+            """Go to vods page for channel"""
+            if ui.state == "top":
+                return
+
+            if ui.state == "follow" and ui.f_filter == "all":
+                ui.win_blink()
+                twitch.request(["vods",
+                                str(config.followed[ui.cur_page[ui.sel]])],
+                                "vods")
+            else:
+                ui.win_blink()
+                twitch.request(["vods",
+                                str(ui.cur_page[ui.sel]['channel']['_id'])],
+                                "vods")
+
+        def game_search(self):
+            """Search by game name (exact match)"""
             string = ui.prompt("Enter Game")
             if string:
                 ui.win_blink()
                 twitch.request(["game", string.decode("utf-8")], "search")
-        elif self.cur_key == config.cp["keys"]["vods"]:
-            if ui.state != "top":
-                if ui.state == "follow" and ui.f_filter == "all":
-                    twitch.request(["vods",
-                                    str(config.followed[ui.cur_page[ui.sel]])],
-                                   "vods")
-                else:
-                    twitch.request(["vods",
-                                    str(ui.cur_page[ui.sel]['channel']['_id'])],
-                                   "vods")
-        elif self.cur_key == config.cp["keys"]["refresh"]:
+
+        def search(self):
+            """Search for streams"""
+            string = ui.prompt("Enter Search Query")
+            if string:
+                ui.win_blink()
+                twitch.request(["stream", string.decode("utf-8")], "search")
+
+        def refresh(self):
+            """Resend last request and reload results"""
             ui.win_blink()
             twitch.request()
             twitch.set_results()
@@ -652,12 +710,29 @@ class Keybinds:
                 if ui.sel >= twitch.results:
                     ui.sel = 0
 
-    def misc_keys(self):
+    class Misc:
         """Keys that don't fit into the other categories."""
-        if self.cur_key == chr(curses.KEY_RESIZE):
+
+        def resize(self):
+            """Reset the screen when the terminal is resized"""
             ui.init_screen()
             ui.reset_page(True)
-        elif self.cur_key == config.cp["keys"]['chat'] and ui.state != "top":
+
+        def exec_yank(self):
+            """Yank channel name to clipboard"""
+            ui.win_blink()
+            # copy channel url to clipboard
+            if (ui.state == "search") or (
+                    ui.state == 'follow' and ui.f_filter == 'online'):
+                clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
+                clip.communicate(input=bytes(
+                    ui.cur_page[ui.sel]['channel']['url'], 'utf-8'))
+
+        def exec_chat(self):
+            """Open chat with chat_method"""
+            if ui.state == "top":
+                return
+
             if config.cp["exec"]["chat_method"] == "browser":
                 Popen([config.cp["exec"]["browser"],
                        config.cp["exec"]["browser_flag"],
@@ -695,14 +770,6 @@ class Keybinds:
                 clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
                 clip.communicate(input=bytes(
                     "/join #" + ui.cur_page[ui.sel]['channel']['name'], 'utf-8'))
-        elif self.cur_key == config.cp["keys"]['yank']:
-            ui.win_blink()
-            # copy channel url to clipboard
-            if (ui.state == "search") or (
-                    ui.state == 'follow' and ui.f_filter == 'online'):
-                clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
-                clip.communicate(input=bytes(
-                    ui.cur_page[ui.sel]['channel']['url'], 'utf-8'))
 
 
 class Query:
