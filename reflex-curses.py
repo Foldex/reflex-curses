@@ -76,6 +76,7 @@ class Config:
             "l_win_color": "white",    # Color of left window
             "r_win_color": "green",    # Color of right window
             "quality": "best",         # Default quality selection
+            "show_borders": "True",    # Display Window Borders
             "show_keys": "True"        # Display Keybinds
         }
 
@@ -294,7 +295,8 @@ class Interface:
         Left window is used for displaying Twitch data and making selections.
         """
         self.win_l.erase()
-        self.win_l.border(0)
+        if config.cp.getboolean("ui", "show_borders"):
+            self.win_l.border(0)
         self.win_l.addnstr(self.size[0] - 1,
                            self.size[1] // 2 - 9,
                            f"page:{self.page + 1}",
@@ -355,7 +357,8 @@ class Interface:
         Right window is used for displaying additional info like descriptions.
         """
         self.win_r.erase()
-        self.win_r.border(0)
+        if config.cp.getboolean("ui", "show_borders"):
+            self.win_r.border(0)
         self.draw_keys()
         index = 0
 
