@@ -490,8 +490,6 @@ class Interface:
 class Keybinds:
     """User input and what to do with pressed keys."""
 
-    # FIXME Crash on 0 results queries with some keybinds
-
     def __init__(self):
         self.cur_key = 0
         self.nav = self.Navigation()
@@ -565,6 +563,9 @@ class Keybinds:
 
         def forward(self):
             """Enter menu or launch stream"""
+            if not ui.cur_page:
+                return
+
             if (ui.state in ("search", "vods") or (
                     ui.state == "follow" and ui.f_filter == "online")):
                 ui.win_blink()
@@ -636,6 +637,9 @@ class Keybinds:
             """Add a channel to the followed list
             Or show all followed channels
             """
+            if not ui.cur_page:
+                return
+
             if ui.state == "search":
                 if ui.cur_page[ui.sel]['channel']['name'] not in config.followed:
                     ui.win_blink()
@@ -677,7 +681,7 @@ class Keybinds:
 
         def vods_view(self):
             """Go to vods page for channel"""
-            if ui.state == "top":
+            if ui.state == "top" or not ui.cur_page:
                 return
 
             if ui.state == "follow" and ui.f_filter == "all":
@@ -720,9 +724,11 @@ class Keybinds:
             ui.reset_page(True)
 
         def exec_yank(self):
-            """Yank channel name to clipboard"""
+            """Yank channel url to clipboard"""
+            if ui.state == "top" or not ui.cur_page:
+                return
+
             ui.win_blink()
-            # copy channel url to clipboard
             if (ui.state == "search") or (
                     ui.state == 'follow' and ui.f_filter == 'online'):
                 clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
@@ -731,7 +737,7 @@ class Keybinds:
 
         def exec_chat(self):
             """Open chat with chat_method"""
-            if ui.state == "top":
+            if ui.state == "top" or not ui.cur_page:
                 return
 
             if config.cp["exec"]["chat_method"] == "browser":
