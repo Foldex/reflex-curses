@@ -11,7 +11,7 @@
   - [Optional](#opt_dep)
 - [Default Keybinds](#def_keys)
   - [Page Navigation](#page_keys)
-  - [Swap Views](#views_keys)
+  - [Swap Views](#view_keys)
   - [Search](#search_keys)
   - [Quality Select](#quality_keys)
   - [Follow List](#follow_keys)
