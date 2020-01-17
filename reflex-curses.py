@@ -840,6 +840,8 @@ class Query:
             url += f"channels/{req[1]}/videos?limit={self.results_limit}"
         elif req[0] == "get_id":
             url += f"users?login={req[1]}"
+        elif req[0] == "get_follows":
+            url += f"users/{req[1]}/follows/channels?limit={self.results_limit}"
         else:
             raise ValueError("Invalid Type Passed")
 
@@ -886,10 +888,12 @@ class Query:
 class CLI:
     """Commands to be run without the TUI interface"""
     def __init__(self):
+        self.arg_num = len(sys.argv)
         self.cur_arg = sys.argv[1]
 
         self.commands = {
-            "-f": self.get_online_followed
+            "-f": self.get_online_followed,
+            "-i": self.import_follows_from_user
         }
 
     def arg_run(self):
@@ -907,6 +911,34 @@ class CLI:
             for stream in sorted(twitch.data["streams"],
                                  key=lambda i: str(i["channel"]["display_name"]).lower()):
                 print(stream["channel"]["display_name"])
+
+    def import_follows_from_user(self):
+        """Adds twitch user's follow list to your own"""
+        if self.arg_num not in (3, 4):
+            print("Usage reflex-curses -i channel_name (--overwrite)")
+            return
+
+        user_id = twitch.get_twitch_id(sys.argv[2])
+        overwrite = bool(self.arg_num == 4 and sys.argv[3] == "--overwrite")
+
+        twitch.request(["get_follows", user_id])
+
+        # TODO Paginate follows > results_limit
+        if twitch.data:
+            if overwrite:
+                config.followed = {}
+
+            old_follows = len(config.followed)
+
+            for result in twitch.data["follows"]:
+                # print(f'{follow["channel"]["name"]}: {follow["channel"]["_id"]}')
+                if result["channel"]["name"] not in config.followed:
+                    config.followed[result["channel"]["name"]] = str(result["channel"]["_id"])
+
+            print(f"Imported {len(config.followed) - old_follows} follows.")
+            config.write_followed_list()
+        else:
+            print(f"Followed list for {sys.argv[2]} not found.")
 
 
 if __name__ == '__main__':
