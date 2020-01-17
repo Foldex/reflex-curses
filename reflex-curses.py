@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """A TUI/CLI streamlink wrapper"""
+# TODO Getting Big, Separate into different modules
 
 import configparser
 import curses
