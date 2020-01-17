@@ -902,12 +902,11 @@ class CLI:
 
     def get_online_followed(self):
         """Prints any online streams in the followed list"""
-        twitch.request(["channel", ",".join(config.followed.values())],
-                       "follow")
+        twitch.request(["channel", ",".join(config.followed.values())])
         if twitch.data:
             for stream in sorted(twitch.data["streams"],
-                                 key=lambda i: str(i['channel']['display_name']).lower()):
-                print(stream['channel']['display_name'])
+                                 key=lambda i: str(i["channel"]["display_name"]).lower()):
+                print(stream["channel"]["display_name"])
 
 
 if __name__ == '__main__':
