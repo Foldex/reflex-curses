@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""A TUI/CLI streamlink wrapper"""
 
 import configparser
 import curses
@@ -492,39 +493,39 @@ class Keybinds:
 
     def __init__(self):
         self.cur_key = 0
-        self.Navigation = self.Navigation()
-        self.Quality = self.Quality()
-        self.Follow = self.Follow()
-        self.Request = self.Request()
-        self.Misc = self.Misc()
+        self.nav = self.Navigation()
+        self.quality = self.Quality()
+        self.follow = self.Follow()
+        self.request = self.Request()
+        self.misc = self.Misc()
 
         self.keybinds = {
-            config.cp["keys"]["back"]: self.Navigation.back,
-            config.cp["keys"]["down"]: self.Navigation.down,
-            config.cp["keys"]["forward"]: self.Navigation.forward,
-            config.cp["keys"]["page+"]: self.Navigation.page_next,
-            config.cp["keys"]["page-"]: self.Navigation.page_prev,
-            config.cp["keys"]["up"]: self.Navigation.up,
-            chr(curses.KEY_ENTER): self.Navigation.forward,
+            config.cp["keys"]["back"]: self.nav.back,
+            config.cp["keys"]["down"]: self.nav.down,
+            config.cp["keys"]["forward"]: self.nav.forward,
+            config.cp["keys"]["page+"]: self.nav.page_next,
+            config.cp["keys"]["page-"]: self.nav.page_prev,
+            config.cp["keys"]["up"]: self.nav.up,
+            chr(curses.KEY_ENTER): self.nav.forward,
 
-            config.cp["keys"]["qual+"]: self.Quality.qual_next,
-            config.cp["keys"]["qual-"]: self.Quality.qual_prev,
+            config.cp["keys"]["qual+"]: self.quality.qual_next,
+            config.cp["keys"]["qual-"]: self.quality.qual_prev,
 
-            config.cp["keys"]["add"]: self.Follow.add,
-            config.cp["keys"]["delete"]: self.Follow.delete,
-            config.cp["keys"]["followed"]: self.Follow.follow_view,
-            config.cp["keys"]["online"]: self.Follow.follow_view,
+            config.cp["keys"]["add"]: self.follow.add,
+            config.cp["keys"]["delete"]: self.follow.delete,
+            config.cp["keys"]["followed"]: self.follow.follow_view,
+            config.cp["keys"]["online"]: self.follow.follow_view,
 
-            config.cp["keys"]["game"]: self.Request.game_search,
-            config.cp["keys"]["refresh"]: self.Request.refresh,
-            config.cp["keys"]["search"]: self.Request.search,
-            config.cp["keys"]["t_game"]: self.Request.top_games_view,
-            config.cp["keys"]["t_stream"]: self.Request.top_streams_view,
-            config.cp["keys"]["vods"]: self.Request.vods_view,
+            config.cp["keys"]["game"]: self.request.game_search,
+            config.cp["keys"]["refresh"]: self.request.refresh,
+            config.cp["keys"]["search"]: self.request.search,
+            config.cp["keys"]["t_game"]: self.request.top_games_view,
+            config.cp["keys"]["t_stream"]: self.request.top_streams_view,
+            config.cp["keys"]["vods"]: self.request.vods_view,
 
-            config.cp["keys"]["chat"]: self.Misc.exec_chat,
-            config.cp["keys"]["yank"]: self.Misc.exec_yank,
-            chr(curses.KEY_RESIZE): self.Misc.resize
+            config.cp["keys"]["chat"]: self.misc.exec_chat,
+            config.cp["keys"]["yank"]: self.misc.exec_yank,
+            chr(curses.KEY_RESIZE): self.misc.resize
         }
 
     def input(self):
@@ -560,7 +561,6 @@ class Keybinds:
                 ui.sel = ui.maxitems - 1
             elif ui.sel > 0:
                 ui.sel -= 1
-
 
         def forward(self):
             """Enter menu or launch stream"""
@@ -661,7 +661,7 @@ class Keybinds:
                         "channel", ",".join(
                             config.followed.values())]
                     user_input.cur_key = config.cp["keys"]["refresh"]
-                    user_input.Request.refresh()
+                    user_input.request.refresh()
 
     class Request:
         """Keys used to query twitch"""
@@ -887,6 +887,7 @@ class Query:
 
         self.cache = self.data
         self.state_cache = ui.state
+
 
 class CLI:
     """Commands to be run without the TUI interface"""
