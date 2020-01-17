@@ -187,7 +187,7 @@ class Interface:
         self.init_screen()
 
     def init_screen(self):
-        """Initializes screen and displays logo.
+        """Initializes the screen.
         Is also called when the terminal is resized.
         """
         self.screen.clear()
@@ -196,10 +196,16 @@ class Interface:
             return
         self.maxlen = self.size[1] // 2 - 4
         self.maxitems = self.size[0] // 2 - 1
+        self.draw_logo()
         self.win_l = curses.newwin(self.size[0], self.size[1] // 2, 0, 0)
         self.win_r = curses.newwin(self.size[0], self.size[1] // 2, 0,
                                    self.size[1] // 2)
 
+        self.screen.move(0, 0)
+        self.screen.refresh()
+
+    def draw_logo(self):
+        """Displays the logo on initial startup"""
         if self.size[1] > 90:
             logo = (
                 "            __ _                                               \n"
@@ -218,9 +224,6 @@ class Interface:
                                 self.size[1] // 2 - 5,
                                 "Loading...",
                                 self.maxlen)
-
-        self.screen.move(0, 0)
-        self.screen.refresh()
 
     def set_state(self, new_state):
         """Set the screen state and resets selection/page number.
