@@ -4,8 +4,6 @@
 
 - [Description](#desc)
 - [Usage](#usage)
-  - [TUI](#tui)
-  - [CLI](#cli)
 - [Changes](#changes)
 - [Dependencies](#depend)
   - [Python](#python_dep)
@@ -27,31 +25,30 @@
 
 # Description
 
-Reflex-Curses is a fork of [twitch-curses](https://gitlab.com/corbie/twitch-curses) with added features.
+Reflex-Curses is a TUI/CLI wrapper around streamlink, allowing for easy launching
+of twitch.tv streams from your terminal.
+
+Fork of [twitch-curses](https://gitlab.com/corbie/twitch-curses) with added features.
 
 <a id="usage"></a>
 
 # Usage
 
-<a id="tui"></a>
+```
+reflex-curses [OPTION]
 
-## TUI
+OPTIONS
+       NONE   Starts up the tui interface
 
-Simply run `reflex-curses.py` in your terminal.
+       -f     Prints out any followed streams that are online.
 
-<a id="cli"></a>
+       -i channel_name (--overwrite)
+              Import channels followed by channel_name into your followed list.
+              Default is to append to your current followed list, add --overwrite to replace it.
+              NOTE: Currently limited to the results_limit (default: 75), large lists might not fully import.
+```
 
-## CLI
-
-Reflex-curses also supports running one off commands without the interactive interface.
-
-Currently only the -f flag is supported.
-
-`reflex-curses.py -f`:
-
-Output followed streams that are online (one per line). An example dmenu script
-is [Here](./scripts/dstreams.sh)
-
+An example dmenu script is [Here](./scripts/dstreams.sh)
 
 <a id="changes"></a>
 
@@ -62,7 +59,8 @@ is [Here](./scripts/dstreams.sh)
 -   Stream process no longer tied to terminal (setsid)
 -   Launch chat for selected stream (browser/weechat/irssi)
 -   Copy channel URL to clipboard (xclip)
--   Locally follow channels (No account needed) (+ Batch Imports from list)
+-   Locally follow channels (No account needed) (+Imports from
+    file/twitch user)
 -   Custom Config File
 -   VOD Support
 -   Search by game name
@@ -238,7 +236,7 @@ port = 6697
 
 ## Followed List Import
 
-Reflex-Curses can also mass import a list of channel names.
+In addition to the -i flag, reflex-curses can also mass import a list of channel names from a file.
 
 Place entries (one per line) in `~/.config/reflex-curses/followed`
 

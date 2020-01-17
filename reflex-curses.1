@@ -1,0 +1,33 @@
+.TH reflex-curses 1 "" "" "reflex-curses"
+.SH NAME
+reflex-curses \- a TUI/CLI twitch streamlink wrapper
+.SH SYNOPSIS
+.B reflex-curses
+[\fBOPTION\fR]
+.SH DESCRIPTION
+.B reflex-curses
+is a fork of
+.B twitch-curses
+that adds additional features.
+.SH OPTIONS
+.TP
+\fBNONE\fR
+Starts up the tui interface
+.TP
+\fB\-f\fR
+Prints out any followed streams that are online.
+.TP
+\fB\-i\fR \fBchannel_name\fR \fB(\-\-overwrite)\fR
+Import channels followed by channel_name into your followed list.
+.br
+Default is to append to your current followed list, add --overwrite to replace it.
+.br
+\fINOTE:\fR Currently limited to the results_limit (default: 75), large lists might not fully import.
+.SH FILES
+Files are saved on exit, be careful when manually editing.
+.IP ~/.config/reflex-curses/config
+Configuration settings
+.IP ~/.config/reflex-curses/followed
+Locally followed channels
+.SH CONFIG
+todo

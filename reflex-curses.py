@@ -893,6 +893,8 @@ class CLI:
 
         self.commands = {
             "-f": self.get_online_followed,
+            "-h": self.display_help,
+            "--help": self.display_help,
             "-i": self.import_follows_from_user
         }
 
@@ -903,6 +905,21 @@ class CLI:
             self.commands[self.cur_arg]()
         else:
             print(f"Invalid Argument Passed: {self.cur_arg}")
+
+    def display_help(self):
+        """Prints help to the screen"""
+        print("""reflex-curses [OPTION]
+
+OPTIONS
+       NONE   Starts up the tui interface
+
+       -f     Prints out any followed streams that are online.
+
+       -i channel_name (--overwrite)
+              Import channels followed by channel_name into your followed list.
+              Default is to append to your current followed list, add --overwrite to replace it.
+              NOTE: Currently limited to the results_limit (default: 75), large lists might not fully import.
+        """)
 
     def get_online_followed(self):
         """Prints any online streams in the followed list"""
