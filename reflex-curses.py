@@ -332,7 +332,10 @@ class Interface:
                                    string, self.maxlen, self.hl_3)
             index += 1
 
-        # Headers
+        self.draw_win_l_headers()
+
+    def draw_win_l_headers(self):
+        """Displays Headers in game view and vod view"""
         if self.state == "search" and twitch.query[0] == "game":
             text = unquote(twitch.query[1])
             t_len = len(text)
