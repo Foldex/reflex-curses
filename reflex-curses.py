@@ -799,7 +799,7 @@ class Query:
         """Fire off request and set data json. Optionally sets the state.
         Retry up to X times on fail."""
 
-        if ui:
+        if ui and self.cache:
             ui.win_blink()
 
         self.prep_url(req)
