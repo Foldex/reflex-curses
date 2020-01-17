@@ -1,0 +1,6 @@
+[FORMAT]
+max-line-length = 99
+disable=no-self-use,too-few-public-methods,inconsistent-return-statements,too-many-instance-attributes
+
+[BASIC]
+good-names=reflex-curses,i,h,s,m,cp,up,config,twitch,ui,cli,user_input
