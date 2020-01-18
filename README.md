@@ -48,7 +48,7 @@ OPTIONS
               NOTE: Currently limited to the results_limit (default: 75), large lists might not fully import.
 ```
 
-An example dmenu script is [Here](./scripts/dstreams.sh)
+An example dmenu script is [Here](./scripts/dmenu_streams.sh)
 
 <a id="changes"></a>
 
