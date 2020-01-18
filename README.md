@@ -3,7 +3,6 @@
 </p>
 
 - [Description](#desc)
-- [Usage](#usage)
 - [Changes](#changes)
 - [Dependencies](#depend)
   - [Python](#python_dep)
@@ -12,6 +11,7 @@
 - [Install](#install)
   - [Setuptools](#install_st)
   - [Manual](#install_manual)
+- [Usage](#usage)
 - [Default Keybinds](#def_keys)
   - [Page Navigation](#page_keys)
   - [Swap Views](#view_keys)
@@ -33,26 +33,6 @@ of twitch.tv streams from your terminal.
 
 Fork of [twitch-curses](https://gitlab.com/corbie/twitch-curses) with added features.
 
-<a id="usage"></a>
-
-# Usage
-
-```
-reflex-curses [OPTION]
-
-OPTIONS
-       NONE   Starts up the tui interface
-
-       -f     Prints out any followed streams that are online.
-
-       -i channel_name (--overwrite)
-              Import channels followed by channel_name into your followed list.
-              Default is to append to your current followed list, add --overwrite to replace it.
-              NOTE: Currently limited to the results_limit (default: 75), large lists might not fully import.
-```
-
-An example dmenu script is [Here](./scripts/dmenu_streams.sh)
-
 <a id="changes"></a>
 
 # Changes
@@ -62,8 +42,7 @@ An example dmenu script is [Here](./scripts/dmenu_streams.sh)
 -   Stream process no longer tied to terminal (setsid)
 -   Launch chat for selected stream (browser/weechat/irssi)
 -   Copy channel URL to clipboard (xclip)
--   Locally follow channels (No account needed) (+Imports from
-    file/twitch user)
+-   Locally follow channels (No account needed) (+Imports from file/twitch user)
 -   Custom Config File
 -   VOD Support
 -   Search by game name
@@ -125,6 +104,26 @@ User: `python setup.py install --user`
 ## Manual
 
 Copy reflex_curses/reflex.py into your path.
+
+<a id="usage"></a>
+
+# Usage
+
+```
+reflex-curses [OPTION]
+
+OPTIONS
+       NONE   Starts up the tui interface
+
+       -f     Prints out any followed streams that are online.
+
+       -i channel_name (--overwrite)
+              Import channels followed by channel_name into your followed list.
+              Default is to append to your current followed list, add --overwrite to replace it.
+              NOTE: Currently limited to the results_limit (default: 75), large lists might not fully import.
+```
+
+An example dmenu script is [Here](./scripts/dmenu_streams.sh)
 
 <a id="def_keys"></a>
 
