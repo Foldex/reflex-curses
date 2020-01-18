@@ -9,6 +9,9 @@
   - [Python](#python_dep)
   - [External](#ext_dep)
   - [Optional](#opt_dep)
+- [Install](#install)
+  - [Setuptools](#install_st)
+  - [Manual](#install_manual)
 - [Default Keybinds](#def_keys)
   - [Page Navigation](#page_keys)
   - [Swap Views](#view_keys)
@@ -104,6 +107,24 @@ An example dmenu script is [Here](./scripts/dmenu_streams.sh)
 -   firefox (default browser)
 -   weechat / irssi (chat)
 
+
+<a id="install"></a>
+
+# Installation
+
+<a id="install_st"></a>
+
+## Setuptools
+
+System: `python setup.py install`
+
+User: `python setup.py install --user`
+
+<a id="install_manual"></a>
+
+## Manual
+
+Copy reflex_curses/reflex.py into your path.
 
 <a id="def_keys"></a>
 
