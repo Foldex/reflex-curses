@@ -973,20 +973,7 @@ OPTIONS
             print(f"Followed list for {sys.argv[2]} not found.")
 
 
-if __name__ == '__main__':
-
-    config = Config()
-    twitch = Query()
-    ui = None  # Dummy init for cli invocation
-
-    if len(sys.argv) >= 2:
-        cli = CLI()
-        cli.arg_run()
-        sys.exit()
-
-    ui = Interface()
-    user_input = Keybinds()
-
+def main():
     try:
         twitch.get_default_view()
 
@@ -1012,3 +999,19 @@ if __name__ == '__main__':
         curses.endwin()
         config.write_config()
         config.write_followed_list()
+
+# Class Inits
+config = Config()
+twitch = Query()
+ui = None  # Dummy init for cli invocation
+
+if len(sys.argv) >= 2:
+    cli = CLI()
+    cli.arg_run()
+    sys.exit()
+
+ui = Interface()
+user_input = Keybinds()
+
+if __name__ == "__main__":
+    main()
