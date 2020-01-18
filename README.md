@@ -103,7 +103,7 @@ User: `python setup.py install --user`
 
 ## Manual
 
-Copy reflex_curses/reflex.py into your path.
+`sudo make install`
 
 <a id="usage"></a>
 
