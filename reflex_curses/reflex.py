@@ -450,34 +450,52 @@ class Interface:
         if not config.cp.getboolean("ui", "show_keys"):
             return
 
-        items = [
-            "search: " + config.cp["keys"]["search"],
-            "followed: " + config.cp["keys"]["followed"],
-            "game: " + config.cp["keys"]["game"],
-            "refresh: " + config.cp["keys"]["refresh"],
-            "quit: " + config.cp["keys"]["quit"]
-        ]
-
-        # TODO Cleanup
-        if self.state == "follow":
-            del items[1]
-            items.insert(1, f"delete: {config.cp['keys']['delete']}")
-            if self.f_filter == "online":
-                items.insert(1, f"all: {config.cp['keys']['add']}")
-            elif self.f_filter == "all":
-                items.insert(1, f"online: {config.cp['keys']['online']}")
-        elif self.state == "search":
-            items.insert(1, f"add follow: {config.cp['keys']['add']}")
-
-        if self.state != "top":
-            items.insert(2, f"chat: {config.cp['keys']['chat']}")
-            items.insert(len(items) - 1, f"top streams: {config.cp['keys']['t_stream']}")
-            items.insert(len(items) - 1, f"top games: {config.cp['keys']['t_game']}")
-            items.insert(len(items) - 1, f"vods: {config.cp['keys']['vods']}")
-            items.insert(len(items) - 1, f"yank: {config.cp['keys']['yank']}")
-            items.insert(0, f"back: {config.cp['keys']['back']}")
+        if self.state == "top":
+            items = [
+                f"back: {config.cp['keys']['back']}",
+                f"search: {config.cp['keys']['search']}",
+                f"followed: {config.cp['keys']['followed']}",
+                f"game: {config.cp['keys']['game']}",
+                f"top streams: {config.cp['keys']['t_stream']}",
+                f"refresh: {config.cp['keys']['refresh']}",
+                f"quit: {config.cp['keys']['quit']}"
+            ]
+        elif self.state in ("search", "vods"):
+            items = [
+                f"back: {config.cp['keys']['back']}",
+                f"search: {config.cp['keys']['search']}",
+                f"add follow: {config.cp['keys']['add']}",
+                f"chat: {config.cp['keys']['chat']}",
+                f"followed: {config.cp['keys']['followed']}",
+                f"game: {config.cp['keys']['game']}",
+                f"refresh: {config.cp['keys']['refresh']}",
+                f"top streams: {config.cp['keys']['t_stream']}",
+                f"top games: {config.cp['keys']['t_game']}",
+                f"vods: {config.cp['keys']['vods']}",
+                f"yank: {config.cp['keys']['yank']}",
+                f"quit: {config.cp['keys']['quit']}"
+            ]
+        elif self.state == "follow":
+            items = [
+                f"back: {config.cp['keys']['back']}",
+                f"search: {config.cp['keys']['search']}",
+                f"all: {config.cp['keys']['add']}",
+                f"chat: {config.cp['keys']['chat']}",
+                f"delete: {config.cp['keys']['delete']}",
+                f"game: {config.cp['keys']['game']}",
+                f"refresh: {config.cp['keys']['refresh']}",
+                f"top streams: {config.cp['keys']['t_stream']}",
+                f"top games: {config.cp['keys']['t_game']}",
+                f"vods: {config.cp['keys']['vods']}",
+                f"yank: {config.cp['keys']['yank']}",
+                f"quit: {config.cp['keys']['quit']}"
+            ]
         else:
-            items.insert(len(items) - 2, f"top streams: {config.cp['keys']['t_stream']}")
+            items = []
+
+        if self.state == "follow" and self.f_filter == "all":
+            del items[2]
+            items.insert(5, f"online: {config.cp['keys']['online']}")
 
         length = len(items)
 
