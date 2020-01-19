@@ -29,27 +29,27 @@ class Config:
 
         # Setup Default Values
         self.cp["keys"] = {
-            "add": 'a',       # Add channel follow / Show all followed
-            "chat": 'c',      # Open chat with chat_method
-            "delete": 'd',    # Delete channel from followed list
-            "followed": 'f',  # Switch to followed view
-            "game": 'g',      # Search by Game Name (exact)
-            "back": 'h',      # Go to initial view
-            "down": 'j',      # Move cursor down
-            "up": 'k',        # Move cursor up
-            "forward": 'l',   # Enter menu or launch stream
-            "online": 'o',    # Show only online streams in followed list
-            "quit": 'q',      # Quit
-            "refresh": 'r',   # Resend last query
-            "t_stream": 's',  # Go to top streams view
-            "t_game": 't',    # Go to top games view
-            "search": '/',    # Search for streams
-            "vods": 'v',      # Go to VOD view
-            "yank": 'y',      # Yank channel url
-            "page+": 'n',     # Next Page
-            "page-": 'p',     # Previous page
-            "qual+": '=',     # Select higher quality
-            "qual-": '-'      # Select lower quality
+            "add": "a",  # Add channel follow / Show all followed
+            "chat": "c",  # Open chat with chat_method
+            "delete": "d",  # Delete channel from followed list
+            "followed": "f",  # Switch to followed view
+            "game": "g",  # Search by Game Name (exact)
+            "back": "h",  # Go to initial view
+            "down": "j",  # Move cursor down
+            "up": "k",  # Move cursor up
+            "forward": "l",  # Enter menu or launch stream
+            "online": "o",  # Show only online streams in followed list
+            "quit": "q",  # Quit
+            "refresh": "r",  # Resend last query
+            "t_stream": "s",  # Go to top streams view
+            "t_game": "t",  # Go to top games view
+            "search": "/",  # Search for streams
+            "vods": "v",  # Go to VOD view
+            "yank": "y",  # Yank channel url
+            "page+": "n",  # Next Page
+            "page-": "p",  # Previous page
+            "qual+": "=",  # Select higher quality
+            "qual-": "-",  # Select lower quality
         }
 
         self.cp["exec"] = {
@@ -58,33 +58,32 @@ class Config:
             "chat_method": "browser",  # browser/weechat/irc
             "player": "mpv",
             "term": "urxvt",
-            "term_flag": "-e"
+            "term_flag": "-e",
         }
 
         self.cp["twitch"] = {
             "client_id": "caozjg12y6hjop39wx996mxn585yqyk",
-            "lang": "",           # Language filter
+            "lang": "",  # Language filter
             # API limit is 100, but API seems to choke at higher than 75
             "results_limit": 75,  # Max number of results for a query
-            "retry_limit": 3      # Max number of retries for a query
+            "retry_limit": 3,  # Max number of retries for a query
         }
 
         self.cp["ui"] = {
-            # Supported Colors:
-            # black/blue/cyan/green/magenta/white/yellow/red
+            # Supported Colors: black/blue/cyan/green/magenta/white/yellow/red
             "default_state": "games",  # Initial view: games/followed/streams
-            "hl_color": "blue",        # Color of selected item highlight
-            "l_win_color": "white",    # Color of left window
-            "r_win_color": "green",    # Color of right window
-            "quality": "best",         # Default quality selection
-            "show_borders": "True",    # Display Window Borders
-            "show_keys": "True"        # Display Keybinds
+            "hl_color": "blue",  # Color of selected item highlight
+            "l_win_color": "white",  # Color of left window
+            "r_win_color": "green",  # Color of right window
+            "quality": "best",  # Default quality selection
+            "show_borders": "True",  # Display Window Borders
+            "show_keys": "True",  # Display Keybinds
         }
 
         self.cp["irc"] = {
             "address": "irc.chat.twitch.tv",  # Address of the irc server
-            "network": "reflex",              # Name of the saved network
-            "port": "6697"                    # Port of the irc server
+            "network": "reflex",  # Name of the saved network
+            "port": "6697",  # Port of the irc server
         }
 
         # Read in Config File
@@ -92,7 +91,7 @@ class Config:
 
     def write_config(self):
         """Writes config to file"""
-        with open(self.config_dir + "/config", 'w') as configfile:
+        with open(self.config_dir + "/config", "w") as configfile:
             self.cp.write(configfile)
 
     def init_followed_list(self):
@@ -121,7 +120,7 @@ class Config:
         file_path = f"{self.config_dir}/followed"
         self.backup(file_path)
 
-        file = open(file_path, 'w')
+        file = open(file_path, "w")
         for i in sorted(self.followed, key=str.lower):
             file.write(f"{i} {self.followed[i]}\n")
         file.close()
@@ -152,7 +151,7 @@ class Interface:
                 "magenta": curses.COLOR_MAGENTA,
                 "white": curses.COLOR_WHITE,
                 "yellow": curses.COLOR_YELLOW,
-                "red": curses.COLOR_RED
+                "red": curses.COLOR_RED,
             }
 
             curses.start_color()
@@ -197,8 +196,7 @@ class Interface:
         self.maxitems = self.size[0] // 2 - 1
         self.draw_logo()
         self.win_l = curses.newwin(self.size[0], self.size[1] // 2, 0, 0)
-        self.win_r = curses.newwin(self.size[0], self.size[1] // 2, 0,
-                                   self.size[1] // 2)
+        self.win_r = curses.newwin(self.size[0], self.size[1] // 2, 0, self.size[1] // 2)
 
         self.screen.move(0, 0)
         self.screen.refresh()
@@ -211,18 +209,22 @@ class Interface:
                 "  _ __ ___ / _| | _____  __      ___ _   _ _ __ ___  ___  ___  \n"
                 " | '__/ _ \\ |_| |/ _ \\ \\/ /____ / __| | | | '__/ __|/ _ \\/ __| \n"
                 " | | |  __/  _| |  __/>  <_____| (__| |_| | |  \\__ \\  __/\\__ \\ \n"
-                " |_|  \\___|_| |_|\\___/_/\\_\\     \\___|\\__,_|_|  |___/\\___||___/ \n")
+                " |_|  \\___|_| |_|\\___/_/\\_\\     \\___|\\__,_|_|  |___/\\___||___/ \n"
+            )
             logo_height = len(logo.splitlines()) + 1
             for i, line in enumerate(logo.splitlines(), 2):
-                self.screen.addnstr(self.size[0] // 2 - (logo_height - i),
-                                    self.size[1] // 2 - (len(line) // 2),
-                                    line, self.maxlen, self.hl_2)
+                self.screen.addnstr(
+                    self.size[0] // 2 - (logo_height - i),
+                    self.size[1] // 2 - (len(line) // 2),
+                    line,
+                    self.maxlen,
+                    self.hl_2,
+                )
 
         else:
-            self.screen.addnstr(self.size[0] // 2 - 1,
-                                self.size[1] // 2 - 5,
-                                "Loading...",
-                                self.maxlen)
+            self.screen.addnstr(
+                self.size[0] // 2 - 1, self.size[1] // 2 - 5, "Loading...", self.maxlen
+            )
 
     def set_state(self, new_state):
         """Set the screen state and resets selection/page number.
@@ -267,14 +269,13 @@ class Interface:
 
         if twitch.data:
             if self.state == "top":
-                self.cur_page = twitch.data['top'][start:end]
-            elif (self.state == "search") or (
-                    self.state == 'follow' and self.f_filter == 'online'):
-                self.cur_page = twitch.data['streams'][start:end]
+                self.cur_page = twitch.data["top"][start:end]
+            elif self.state == "search" or self.state == "follow" and self.f_filter == "online":
+                self.cur_page = twitch.data["streams"][start:end]
             elif self.state == "follow" and self.f_filter == "all":
                 self.cur_page = list(config.followed)[start:end]
             elif self.state == "vods":
-                self.cur_page = twitch.data['videos'][start:end]
+                self.cur_page = twitch.data["videos"][start:end]
         else:
             self.cur_page = []
 
@@ -283,8 +284,7 @@ class Interface:
         If nothing was entered, kill the window.
         Used for searching for streams and game name.
         """
-        win = curses.newwin(3, self.size[1] // 2 - 4,
-                            self.size[0] // 2 - 1, self.size[1] // 4)
+        win = curses.newwin(3, self.size[1] // 2 - 4, self.size[0] // 2 - 1, self.size[1] // 4)
         win.border(0)
         win.addnstr(0, 3, text, self.size[0] - 4)
         win.refresh()
@@ -301,10 +301,9 @@ class Interface:
         self.win_l.erase()
         if config.cp.getboolean("ui", "show_borders"):
             self.win_l.border(0)
-        self.win_l.addnstr(self.size[0] - 2,
-                           self.size[1] // 2 - 9,
-                           f"page:{self.page + 1}",
-                           self.maxlen)
+        self.win_l.addnstr(
+            self.size[0] - 2, self.size[1] // 2 - 9, f"page:{self.page + 1}", self.maxlen,
+        )
         index = 0
 
         for i in self.cur_page:
@@ -312,28 +311,26 @@ class Interface:
                 break
 
             if self.state == "top":
-                string = str(i['game']['name'])
+                string = str(i["game"]["name"])
             elif self.state == "vods":
-                string = str(i['title']).replace("\n", "")
+                string = str(i["title"]).replace("\n", "")
                 # truncate long vod titles
                 if len(string) > self.maxlen // 2:
-                    string = string[:self.maxlen // 2] + "..."
-                string += " - " + str(i['game'])
-            elif (self.state == "search" or (
-                    self.state == "follow" and self.f_filter == "online")):
-                string = str(i['channel']['display_name'])
+                    string = string[: self.maxlen // 2] + "..."
+                string += " - " + str(i["game"])
+            elif self.state == "search" or (self.state == "follow" and self.f_filter == "online"):
+                string = str(i["channel"]["display_name"])
                 if twitch.query[0] != "game":
-                    string += " - " + str(i['game'])
+                    string += " - " + str(i["game"])
             elif self.state == "follow" and self.f_filter == "all":
                 string = str(i)
 
             if index == self.sel:
-                self.win_l.addnstr(index * 2 + 2, 2,
-                                   string, self.maxlen,
-                                   curses.A_UNDERLINE | self.hl_1)
+                self.win_l.addnstr(
+                    index * 2 + 2, 2, string, self.maxlen, curses.A_UNDERLINE | self.hl_1,
+                )
             else:
-                self.win_l.addnstr(index * 2 + 2, 2,
-                                   string, self.maxlen, self.hl_3)
+                self.win_l.addnstr(index * 2 + 2, 2, string, self.maxlen, self.hl_3)
             index += 1
 
         self.draw_win_l_headers()
@@ -343,19 +340,13 @@ class Interface:
         if self.state == "search" and twitch.query[0] == "game":
             text = unquote(twitch.query[1])
             t_len = len(text)
-            self.win_l.addnstr(1, self.size[1] // 2 - (t_len + 2),
-                               text,
-                               self.maxlen)
-            self.win_l.hline(2, self.size[1] // 2 - (t_len + 2),
-                             curses.ACS_HLINE, t_len)
+            self.win_l.addnstr(1, self.size[1] // 2 - (t_len + 2), text, self.maxlen)
+            self.win_l.hline(2, self.size[1] // 2 - (t_len + 2), curses.ACS_HLINE, t_len)
         elif self.state == "vods":
             text = "VODs"
             t_len = len(text)
-            self.win_l.addnstr(1, self.size[1] // 2 - (t_len + 2),
-                               text,
-                               self.maxlen)
-            self.win_l.hline(2, self.size[1] // 2 - (t_len + 2),
-                             curses.ACS_HLINE, t_len)
+            self.win_l.addnstr(1, self.size[1] // 2 - (t_len + 2), text, self.maxlen)
+            self.win_l.hline(2, self.size[1] // 2 - (t_len + 2), curses.ACS_HLINE, t_len)
 
         self.win_l.refresh()
 
@@ -378,68 +369,44 @@ class Interface:
                 continue
 
             if self.state == "top":
-                self.win_r.addnstr(2, 3,
-                                   f"Viewers: {i['viewers']}",
-                                   self.maxlen, self.hl_2)
-                self.win_r.addnstr(3, 3,
-                                   f"Channels: {i['channels']}",
-                                   self.maxlen, self.hl_2)
+                self.win_r.addnstr(2, 3, f"Viewers: {i['viewers']}", self.maxlen, self.hl_2)
+                self.win_r.addnstr(3, 3, f"Channels: {i['channels']}", self.maxlen, self.hl_2)
             elif self.state == "vods":
-                m, s = divmod(i['length'], 60)
+                m, s = divmod(i["length"], 60)
                 h, m = divmod(m, 60)
 
-                self.win_r.addnstr(2, 3,
-                                   f"Date: {i['created_at']}",
-                                   self.maxlen, self.hl_2)
-                self.win_r.addnstr(3, 3,
-                                   f"Views: {i['views']}",
-                                   self.maxlen, self.hl_2)
-                self.win_r.addnstr(4, 3,
-                                   f"Length: {h:02}:{m:02}:{s:02}",
-                                   self.maxlen, self.hl_2)
-                self.win_r.addnstr(5, 3,
-                                   f"Status: {i['status']}",
-                                   self.maxlen, self.hl_2)
-            elif (self.state == "search" or (self.state == "follow" and
-                                             self.f_filter == "online")):
+                self.win_r.addnstr(2, 3, f"Date: {i['created_at']}", self.maxlen, self.hl_2)
+                self.win_r.addnstr(3, 3, f"Views: {i['views']}", self.maxlen, self.hl_2)
+                self.win_r.addnstr(4, 3, f"Length: {h:02}:{m:02}:{s:02}", self.maxlen, self.hl_2)
+                self.win_r.addnstr(5, 3, f"Status: {i['status']}", self.maxlen, self.hl_2)
+            elif self.state == "search" or (self.state == "follow" and self.f_filter == "online"):
                 self.win_r.addnstr(
-                    self.size[0] - 3, 2,
-                    "quality: " +
-                    config.cp["keys"]['qual-'] +
-                    config.cp["keys"]['qual+'],
-                    self.maxlen)
-                self.win_r.addnstr(self.size[0] - 2, 3,
-                                   self.quality[self.cur_quality],
-                                   self.maxlen)
-                self.win_r.addnstr(2, 3,
-                                   str(i['channel']['url']),
-                                   self.maxlen, self.hl_2)
-                self.win_r.addnstr(4, 3,
-                                   f"Language: {i['channel']['language']}",
-                                   self.maxlen, self.hl_2)
-                self.win_r.addnstr(5, 3,
-                                   f"Viewers: {i['viewers']}",
-                                   self.maxlen, self.hl_2)
-                self.win_r.addnstr(6, 3,
-                                   "Status:",
-                                   self.maxlen, self.hl_2)
-                status = wrap(str(i['channel']['status']),
-                              self.size[1] // 2 - 6)
+                    self.size[0] - 3,
+                    2,
+                    "quality: " + config.cp["keys"]["qual-"] + config.cp["keys"]["qual+"],
+                    self.maxlen,
+                )
+                self.win_r.addnstr(
+                    self.size[0] - 2, 3, self.quality[self.cur_quality], self.maxlen
+                )
+                self.win_r.addnstr(2, 3, str(i["channel"]["url"]), self.maxlen, self.hl_2)
+                self.win_r.addnstr(
+                    4, 3, f"Language: {i['channel']['language']}", self.maxlen, self.hl_2,
+                )
+                self.win_r.addnstr(5, 3, f"Viewers: {i['viewers']}", self.maxlen, self.hl_2)
+                self.win_r.addnstr(6, 3, "Status:", self.maxlen, self.hl_2)
+                status = wrap(str(i["channel"]["status"]), self.size[1] // 2 - 6)
                 l_num = 7
                 for line in status:
                     if l_num >= self.size[0] - 4:
                         break
-                    self.win_r.addstr(l_num, 4,
-                                      line,
-                                      self.hl_2)
+                    self.win_r.addstr(l_num, 4, line, self.hl_2)
                     l_num += 1
                     # TODO Clean up
                     # Lazy way of setting cursor position to display stderr
                     # output from streamlink. A large enough error message
                     # will vomit on the screen
-                self.win_r.addstr(l_num, 4,
-                                  "",
-                                  self.hl_2)
+                self.win_r.addstr(l_num, 4, "", self.hl_2)
             index += 1
 
         self.win_r.refresh()
@@ -457,7 +424,7 @@ class Interface:
                 f"game: {config.cp['keys']['game']}",
                 f"top streams: {config.cp['keys']['t_stream']}",
                 f"refresh: {config.cp['keys']['refresh']}",
-                f"quit: {config.cp['keys']['quit']}"
+                f"quit: {config.cp['keys']['quit']}",
             ]
         elif self.state in ("search", "vods"):
             items = [
@@ -472,7 +439,7 @@ class Interface:
                 f"top games: {config.cp['keys']['t_game']}",
                 f"vods: {config.cp['keys']['vods']}",
                 f"yank: {config.cp['keys']['yank']}",
-                f"quit: {config.cp['keys']['quit']}"
+                f"quit: {config.cp['keys']['quit']}",
             ]
         elif self.state == "follow":
             items = [
@@ -487,7 +454,7 @@ class Interface:
                 f"top games: {config.cp['keys']['t_game']}",
                 f"vods: {config.cp['keys']['vods']}",
                 f"yank: {config.cp['keys']['yank']}",
-                f"quit: {config.cp['keys']['quit']}"
+                f"quit: {config.cp['keys']['quit']}",
             ]
         else:
             items = []
@@ -501,9 +468,9 @@ class Interface:
         # only draw keys if it takes up less than half the vertical space
         if self.size[0] // 2 > length:
             for i in items:
-                self.win_r.addnstr(self.size[0] - (length + 1),
-                                   self.size[1] // 2 - (len(i) + 2),
-                                   i, self.maxlen)
+                self.win_r.addnstr(
+                    self.size[0] - (length + 1), self.size[1] // 2 - (len(i) + 2), i, self.maxlen,
+                )
                 length -= 1
 
 
@@ -526,25 +493,21 @@ class Keybinds:
             config.cp["keys"]["page-"]: self.nav.page_prev,
             config.cp["keys"]["up"]: self.nav.up,
             chr(curses.KEY_ENTER): self.nav.forward,
-
             config.cp["keys"]["qual+"]: self.quality.qual_next,
             config.cp["keys"]["qual-"]: self.quality.qual_prev,
-
             config.cp["keys"]["add"]: self.follow.add,
             config.cp["keys"]["delete"]: self.follow.delete,
             config.cp["keys"]["followed"]: self.follow.follow_view,
             config.cp["keys"]["online"]: self.follow.follow_view,
-
             config.cp["keys"]["game"]: self.request.game_search,
             config.cp["keys"]["refresh"]: self.request.refresh,
             config.cp["keys"]["search"]: self.request.search,
             config.cp["keys"]["t_game"]: self.request.top_games_view,
             config.cp["keys"]["t_stream"]: self.request.top_streams_view,
             config.cp["keys"]["vods"]: self.request.vods_view,
-
             config.cp["keys"]["chat"]: self.misc.exec_chat,
             config.cp["keys"]["yank"]: self.misc.exec_yank,
-            chr(curses.KEY_RESIZE): self.misc.resize
+            chr(curses.KEY_RESIZE): self.misc.resize,
         }
 
     def input(self):
@@ -586,27 +549,32 @@ class Keybinds:
             if not ui.cur_page:
                 return
 
-            if (ui.state in ("search", "vods") or (
-                    ui.state == "follow" and ui.f_filter == "online")):
+            if ui.state in ("search", "vods") or (
+                ui.state == "follow" and ui.f_filter == "online"
+            ):
                 ui.win_blink()
                 if ui.state != "vods":
-                    url = ui.cur_page[ui.sel]['channel']['url']
+                    url = ui.cur_page[ui.sel]["channel"]["url"]
                 else:
-                    url = ui.cur_page[ui.sel]['url']
+                    url = ui.cur_page[ui.sel]["url"]
 
-                Popen([
-                    "setsid",  # don't close mpv if reflex is closed
-                    "streamlink",
-                    "-Q", "--twitch-disable-hosting",
-                    "--http-header",
-                    "Client-ID=" + config.cp["twitch"]["client_id"],
-                    "-t {author} - {title}",
-                    "-p", config.cp["exec"]["player"],
-                    url, ui.quality[ui.cur_quality]])
+                Popen(
+                    [
+                        "setsid",  # don't close mpv if reflex is closed
+                        "streamlink",
+                        "-Q",
+                        "--twitch-disable-hosting",
+                        "--http-header",
+                        "Client-ID=" + config.cp["twitch"]["client_id"],
+                        "-t {author} - {title}",
+                        "-p",
+                        config.cp["exec"]["player"],
+                        url,
+                        ui.quality[ui.cur_quality],
+                    ]
+                )
             elif ui.state == "top":
-                twitch.request(["game",
-                                ui.cur_page[ui.sel]['game']['name']],
-                               "search")
+                twitch.request(["game", ui.cur_page[ui.sel]["game"]["name"]], "search")
 
         def back(self):
             """Go to cached page"""
@@ -647,10 +615,9 @@ class Keybinds:
         def follow_view(self):
             """Go to the followed channels page"""
             if (user_input.cur_key == config.cp["keys"]["followed"] and ui.state != "follow") or (
-                    user_input.cur_key == config.cp["keys"]["online"] and ui.f_filter == "all"):
-                twitch.request(["channel",
-                                ",".join(config.followed.values())],
-                               "follow")
+                user_input.cur_key == config.cp["keys"]["online"] and ui.f_filter == "all"
+            ):
+                twitch.request(["channel", ",".join(config.followed.values())], "follow")
                 ui.f_filter = "online"
 
         def add(self):
@@ -661,10 +628,11 @@ class Keybinds:
                 return
 
             if ui.state == "search":
-                if ui.cur_page[ui.sel]['channel']['name'] not in config.followed:
+                if ui.cur_page[ui.sel]["channel"]["name"] not in config.followed:
                     ui.win_blink()
-                    config.followed[ui.cur_page[ui.sel]['channel']['name']] = str(
-                        ui.cur_page[ui.sel]['channel']['_id'])
+                    config.followed[ui.cur_page[ui.sel]["channel"]["name"]] = str(
+                        ui.cur_page[ui.sel]["channel"]["_id"]
+                    )
             elif ui.state == "follow" and ui.f_filter != "all":
                 ui.f_filter = "all"
                 ui.reset_page()
@@ -680,11 +648,8 @@ class Keybinds:
                     del config.followed[ui.cur_page[ui.sel]]
             elif ui.f_filter == "online":
                 if ui.cur_page:
-                    del config.followed[ui.cur_page[ui.sel]
-                                        ['channel']['name']]
-                    twitch.query = [
-                        "channel", ",".join(
-                            config.followed.values())]
+                    del config.followed[ui.cur_page[ui.sel]["channel"]["name"]]
+                    twitch.query = ["channel", ",".join(config.followed.values())]
                     user_input.cur_key = config.cp["keys"]["refresh"]
                     user_input.request.refresh()
 
@@ -705,13 +670,9 @@ class Keybinds:
                 return
 
             if ui.state == "follow" and ui.f_filter == "all":
-                twitch.request(["vods",
-                                str(config.followed[ui.cur_page[ui.sel]])],
-                               "vods")
+                twitch.request(["vods", str(config.followed[ui.cur_page[ui.sel]])], "vods")
             else:
-                twitch.request(["vods",
-                                str(ui.cur_page[ui.sel]['channel']['_id'])],
-                               "vods")
+                twitch.request(["vods", str(ui.cur_page[ui.sel]["channel"]["_id"])], "vods")
 
         def game_search(self):
             """Search by game name (exact match)"""
@@ -749,11 +710,9 @@ class Keybinds:
                 return
 
             ui.win_blink()
-            if (ui.state == "search") or (
-                    ui.state == 'follow' and ui.f_filter == 'online'):
-                clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
-                clip.communicate(input=bytes(
-                    ui.cur_page[ui.sel]['channel']['url'], 'utf-8'))
+            if (ui.state == "search") or (ui.state == "follow" and ui.f_filter == "online"):
+                clip = Popen(["xclip", "-selection", "c"], stdin=PIPE)
+                clip.communicate(input=bytes(ui.cur_page[ui.sel]["channel"]["url"], "utf-8"))
 
         def exec_chat(self):
             """Open chat with chat_method"""
@@ -761,42 +720,60 @@ class Keybinds:
                 return
 
             if config.cp["exec"]["chat_method"] == "browser":
-                Popen([config.cp["exec"]["browser"],
-                       config.cp["exec"]["browser_flag"],
-                       ("https://twitch.tv/popout/"
-                        f"{ui.cur_page[ui.sel]['channel']['name']}/chat")],
-                      stdout=DEVNULL, stderr=DEVNULL)
+                Popen(
+                    [
+                        config.cp["exec"]["browser"],
+                        config.cp["exec"]["browser_flag"],
+                        f"https://twitch.tv/popout/{ui.cur_page[ui.sel]['channel']['name']}/chat",
+                    ],
+                    stdout=DEVNULL,
+                    stderr=DEVNULL,
+                )
             elif config.cp["exec"]["chat_method"] == "weechat":
                 # TODO Allow login via account oauth
                 num = randint(1000000, 99999999)
                 nick = f"justinfan{num}"
-                Popen([config.cp["exec"]["term"],
-                       config.cp["exec"]["term_flag"],
-                       'weechat', '-r',
-                       (f'/server add {config.cp["irc"]["network"]} '
-                        f'{config.cp["irc"]["address"]}/{config.cp["irc"]["port"]};'
-                        '/set irc.server.{config.cp["irc"]["network"]}.command '
-                        '/quote CAP REQ :twitch.tv/membership;'
-                        f'/set irc.server.{config.cp["irc"]["network"]}.nicks {nick};'
-                        f'/set irc.server.{config.cp["irc"]["network"]}.username {nick};'
-                        f'/set irc.server.{config.cp["irc"]["network"]}.realname {nick};'
-                        # Setting autojoin is kind of hacky
-                        # It will overwrite the saved setting for the network
-                        # TODO Alternatives for cleaner joining?
-                        f'/set irc.server.{config.cp["irc"]["network"]}.autojoin '
-                        f'#{ui.cur_page[ui.sel]["channel"]["name"]};'
-                        f'/connect {config.cp["irc"]["network"]}')])
+                Popen(
+                    [
+                        config.cp["exec"]["term"],
+                        config.cp["exec"]["term_flag"],
+                        "weechat",
+                        "-r",
+                        (
+                            f'/server add {config.cp["irc"]["network"]} '
+                            f'{config.cp["irc"]["address"]}/{config.cp["irc"]["port"]};'
+                            '/set irc.server.{config.cp["irc"]["network"]}.command '
+                            "/quote CAP REQ :twitch.tv/membership;"
+                            f'/set irc.server.{config.cp["irc"]["network"]}.nicks {nick};'
+                            f'/set irc.server.{config.cp["irc"]["network"]}.username {nick};'
+                            f'/set irc.server.{config.cp["irc"]["network"]}.realname {nick};'
+                            # Setting autojoin is kind of hacky
+                            # It will overwrite the saved setting for the network
+                            # TODO Alternatives for cleaner joining?
+                            f'/set irc.server.{config.cp["irc"]["network"]}.autojoin '
+                            f'#{ui.cur_page[ui.sel]["channel"]["name"]};'
+                            f'/connect {config.cp["irc"]["network"]}'
+                        ),
+                    ]
+                )
             elif config.cp["exec"]["chat_method"] == "irssi":
                 # Irssi doesn't seem to support running commands from args
                 # And editing irssi's config file itself seems messy
                 # The best we could do is join an existing network
                 # and copy the join command to clipboard
-                Popen([config.cp["exec"]["term"],
-                       config.cp["exec"]["term_flag"],
-                       'irssi', '-c', config.cp["irc"]["network"]])
-                clip = Popen(['xclip', '-selection', 'c'], stdin=PIPE)
-                clip.communicate(input=bytes(
-                    "/join #" + ui.cur_page[ui.sel]['channel']['name'], 'utf-8'))
+                Popen(
+                    [
+                        config.cp["exec"]["term"],
+                        config.cp["exec"]["term_flag"],
+                        "irssi",
+                        "-c",
+                        config.cp["irc"]["network"],
+                    ]
+                )
+                clip = Popen(["xclip", "-selection", "c"], stdin=PIPE)
+                clip.communicate(
+                    input=bytes("/join #" + ui.cur_page[ui.sel]["channel"]["name"], "utf-8")
+                )
 
 
 class Query:
@@ -881,22 +858,21 @@ class Query:
         """Count the number of results from the request."""
         if self.data:
             if ui.state == "top":
-                self.results = len(self.data['top'])
-            elif (ui.state == "search") or (
-                    ui.state == 'follow' and ui.f_filter == 'online'):
-                self.results = len(self.data['streams'])
+                self.results = len(self.data["top"])
+            elif (ui.state == "search") or (ui.state == "follow" and ui.f_filter == "online"):
+                self.results = len(self.data["streams"])
             elif ui.state == "follow" and ui.f_filter == "all":
                 self.results = len(config.followed)
             elif ui.state == "vods":
-                self.results = len(self.data['videos'])
+                self.results = len(self.data["videos"])
         else:
             self.results = 0
 
     def get_twitch_id(self, name):
         """Takes a twitch channel username, Returns its corresponding ID"""
         self.request(["get_id", name])
-        if self.data['_total'] > 0:
-            return self.data['users'][0]['_id']
+        if self.data["_total"] > 0:
+            return self.data["users"][0]["_id"]
 
     def get_default_view(self):
         """Request for default view on program start"""
@@ -904,9 +880,7 @@ class Query:
         if default_view == "games":
             self.request(["topgames", None], "top")
         elif default_view == "followed":
-            self.request(["channel",
-                          ",".join(config.followed.values())],
-                         "follow")
+            self.request(["channel", ",".join(config.followed.values())], "follow")
         elif default_view == "streams":
             self.request(["stream", " "], "search")
         else:
@@ -918,6 +892,7 @@ class Query:
 
 class CLI:
     """Commands to be run without the TUI interface"""
+
     def __init__(self):
         self.arg_num = len(sys.argv)
         self.cur_arg = sys.argv[1]
@@ -926,7 +901,7 @@ class CLI:
             "-f": self.get_online_followed,
             "-h": self.display_help,
             "--help": self.display_help,
-            "-i": self.import_follows_from_user
+            "-i": self.import_follows_from_user,
         }
 
     def arg_run(self):
@@ -939,7 +914,8 @@ class CLI:
 
     def display_help(self):
         """Prints help to the screen"""
-        print("""reflex-curses [OPTION]
+        print(
+            """reflex-curses [OPTION]
 
 OPTIONS
        NONE   Starts up the tui interface
@@ -951,14 +927,16 @@ OPTIONS
               Default is to append to your current followed list, add --overwrite to replace it.
               NOTE: Currently limited to the results_limit (default: 75), large followed lists
                     might not fully import.
-        """)
+        """
+        )
 
     def get_online_followed(self):
         """Prints any online streams in the followed list"""
         twitch.request(["channel", ",".join(config.followed.values())])
         if twitch.data:
-            for stream in sorted(twitch.data["streams"],
-                                 key=lambda i: str(i["channel"]["display_name"]).lower()):
+            for stream in sorted(
+                twitch.data["streams"], key=lambda i: str(i["channel"]["display_name"]).lower(),
+            ):
                 print(stream["channel"]["display_name"])
 
     def import_follows_from_user(self):
@@ -1016,6 +994,7 @@ def main():
         curses.endwin()
         config.write_config()
         config.write_followed_list()
+
 
 # Class Inits
 config = Config()
