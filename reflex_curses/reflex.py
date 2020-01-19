@@ -29,8 +29,7 @@ class Config:
 
         # Setup Default Values
         self.cp["keys"] = {
-            "add": 'a',       # Add a channel to the followed list
-                              # If in followed view, show all streams
+            "add": 'a',       # Add channel follow / Show all followed
             "chat": 'c',      # Open chat with chat_method
             "delete": 'd',    # Delete channel from followed list
             "followed": 'f',  # Switch to followed view
