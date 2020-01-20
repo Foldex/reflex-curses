@@ -898,6 +898,8 @@ class CLI:
         self.cur_arg = sys.argv[1]
 
         self.commands = {
+            "-a": self.add_user_follow,
+            "-d": self.delete_user_follow,
             "-f": self.get_online_followed,
             "-h": self.display_help,
             "--help": self.display_help,
@@ -920,6 +922,13 @@ class CLI:
 OPTIONS
        NONE   Starts up the tui interface
 
+       -a     Add a twitch channel to your followed list
+
+       -d     Delete a twitch channel from your followed list
+
+       -h, --help
+              Print help message
+
        -f     Prints out any followed streams that are online.
 
        -i channel_name (--overwrite)
@@ -929,6 +938,40 @@ OPTIONS
                     might not fully import.
         """
         )
+
+    def add_user_follow(self):
+        """Adds a channel name to your followed list"""
+        if self.arg_num != 3:
+            print("Usage reflex-curses -a channel_name")
+            return
+
+        if sys.argv[2] in config.followed:
+            print(f"Channel {sys.argv[2]} already followed")
+            return
+
+        user_id = twitch.get_twitch_id(sys.argv[2])
+
+        if not user_id:
+            print(f"Channel {sys.argv[2]} not found")
+            return
+
+        config.followed[sys.argv[2]] = user_id
+        print(f"Followed {sys.argv[2]}")
+        config.write_followed_list()
+
+    def delete_user_follow(self):
+        """Deletes a channel from your followed list"""
+        if self.arg_num != 3:
+            print("Usage reflex-curses -d channel_name")
+            return
+
+        if sys.argv[2] not in config.followed:
+            print(f"Channel {sys.argv[2]} not followed")
+            return
+
+        del config.followed[sys.argv[2]]
+        print(f"Deleted {sys.argv[2]}")
+        config.write_followed_list()
 
     def get_online_followed(self):
         """Prints any online streams in the followed list"""
