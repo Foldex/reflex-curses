@@ -35,6 +35,7 @@ class Config:
             "followed": "f",  # Switch to followed view
             "game": "g",  # Search by Game Name (exact)
             "back": "h",  # Go to initial view
+            "import": "i",  # Import follows from twitch user
             "down": "j",  # Move cursor down
             "up": "k",  # Move cursor up
             "forward": "l",  # Enter menu or launch stream
@@ -114,6 +115,24 @@ class Config:
 
                 self.followed[name] = api_id
             file.close()
+
+    def import_follows_from_user(self, username, overwrite=False):
+        """Adds twitch user's follow list to your own"""
+
+        user_id = twitch.get_twitch_id(username)
+        twitch.request(["get_follows", user_id])
+
+        if not twitch.data:
+            return
+
+        if overwrite:
+            config.followed = {}
+
+        # TODO Paginate follows > results_limit
+        for result in twitch.data["follows"]:
+            # print(f'{follow["channel"]["name"]}: {follow["channel"]["_id"]}')
+            if result["channel"]["name"] not in config.followed:
+                config.followed[result["channel"]["name"]] = str(result["channel"]["_id"])
 
     def write_followed_list(self):
         """Write followed channels list to file, backing up old one."""
@@ -449,6 +468,7 @@ class Interface:
                 f"chat: {config.cp['keys']['chat']}",
                 f"delete: {config.cp['keys']['delete']}",
                 f"game: {config.cp['keys']['game']}",
+                f"import: {config.cp['keys']['import']}",
                 f"refresh: {config.cp['keys']['refresh']}",
                 f"top streams: {config.cp['keys']['t_stream']}",
                 f"top games: {config.cp['keys']['t_game']}",
@@ -497,6 +517,7 @@ class Keybinds:
             config.cp["keys"]["qual-"]: self.quality.qual_prev,
             config.cp["keys"]["add"]: self.follow.add,
             config.cp["keys"]["delete"]: self.follow.delete,
+            config.cp["keys"]["import"]: self.follow.user_import,
             config.cp["keys"]["followed"]: self.follow.follow_view,
             config.cp["keys"]["online"]: self.follow.follow_view,
             config.cp["keys"]["game"]: self.request.game_search,
@@ -650,8 +671,21 @@ class Keybinds:
                 if ui.cur_page:
                     del config.followed[ui.cur_page[ui.sel]["channel"]["name"]]
                     twitch.query = ["channel", ",".join(config.followed.values())]
-                    user_input.cur_key = config.cp["keys"]["refresh"]
                     user_input.request.refresh()
+
+        def user_import(self):
+            """Import follows from user"""
+            if ui.state != "follow":
+                return
+
+            overwrite = False
+            user = ui.prompt("Import from user")
+
+            if user:
+                config.import_follows_from_user(user, overwrite)
+                twitch.query = ["channel", ",".join(config.followed.values())]
+                user_input.request.refresh()
+
 
     class Request:
         """Keys used to query twitch"""
@@ -903,7 +937,7 @@ class CLI:
             "-f": self.get_online_followed,
             "-h": self.display_help,
             "--help": self.display_help,
-            "-i": self.import_follows_from_user,
+            "-i": self.import_user_follows,
         }
 
     def arg_run(self):
@@ -982,30 +1016,23 @@ OPTIONS
             ):
                 print(stream["channel"]["display_name"])
 
-    def import_follows_from_user(self):
+    def import_user_follows(self):
         """Adds twitch user's follow list to your own"""
         if self.arg_num not in (3, 4):
             print("Usage reflex-curses -i channel_name (--overwrite)")
             return
 
-        user_id = twitch.get_twitch_id(sys.argv[2])
         overwrite = bool(self.arg_num == 4 and sys.argv[3] == "--overwrite")
 
-        twitch.request(["get_follows", user_id])
-
-        # TODO Paginate follows > results_limit
-        if twitch.data:
-            if overwrite:
-                config.followed = {}
-
+        if overwrite:
+            old_follows = 0
+        else:
             old_follows = len(config.followed)
 
-            for result in twitch.data["follows"]:
-                # print(f'{follow["channel"]["name"]}: {follow["channel"]["_id"]}')
-                if result["channel"]["name"] not in config.followed:
-                    config.followed[result["channel"]["name"]] = str(result["channel"]["_id"])
+        config.import_follows_from_user(sys.argv[2], overwrite)
 
-            print(f"Imported {len(config.followed) - old_follows} follows.")
+        if twitch.data:
+            print(f"Imported {len(config.followed) - old_follows} new follows.")
             config.write_followed_list()
         else:
             print(f"Followed list for {sys.argv[2]} not found.")
