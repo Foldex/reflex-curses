@@ -115,9 +115,11 @@ reflex-curses [OPTION]
 OPTIONS
        NONE   Starts up the tui interface
 
-       -a     Add a twitch channel to your followed list
+       -a channel_name
+              Add a twitch channel to your followed list
 
-       -d     Delete a twitch channel from your followed list
+       -d channel_name
+              Delete a twitch channel from your followed list
 
        -h, --help
               Print help message

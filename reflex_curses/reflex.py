@@ -956,9 +956,11 @@ class CLI:
 OPTIONS
        NONE   Starts up the tui interface
 
-       -a     Add a twitch channel to your followed list
+       -a channel_name
+              Add a twitch channel to your followed list
 
-       -d     Delete a twitch channel from your followed list
+       -d channel_name
+              Delete a twitch channel from your followed list
 
        -h, --help
               Print help message
@@ -976,7 +978,7 @@ OPTIONS
     def add_user_follow(self):
         """Adds a channel name to your followed list"""
         if self.arg_num != 3:
-            print("Usage reflex-curses -a channel_name")
+            print("Usage: reflex-curses -a channel_name")
             return
 
         if sys.argv[2] in config.followed:
@@ -996,7 +998,7 @@ OPTIONS
     def delete_user_follow(self):
         """Deletes a channel from your followed list"""
         if self.arg_num != 3:
-            print("Usage reflex-curses -d channel_name")
+            print("Usage: reflex-curses -d channel_name")
             return
 
         if sys.argv[2] not in config.followed:
@@ -1019,7 +1021,7 @@ OPTIONS
     def import_user_follows(self):
         """Adds twitch user's follow list to your own"""
         if self.arg_num not in (3, 4):
-            print("Usage reflex-curses -i channel_name (--overwrite)")
+            print("Usage: reflex-curses -i channel_name (--overwrite)")
             return
 
         overwrite = bool(self.arg_num == 4 and sys.argv[3] == "--overwrite")
