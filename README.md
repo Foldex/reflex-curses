@@ -9,6 +9,7 @@
   - [External](#ext_dep)
   - [Optional](#opt_dep)
 - [Install](#install)
+  - [AUR](#install_aur)
   - [Setuptools](#install_st)
   - [Manual](#install_manual)
 - [Usage](#usage)
@@ -84,6 +85,12 @@ Fork of [twitch-curses](https://gitlab.com/corbie/twitch-curses) with added feat
 <a id="install"></a>
 
 # Installation
+
+<a id="install_aur"></a>
+
+## Arch AUR
+
+`yay -S reflex-curses`
 
 <a id="install_st"></a>
 
