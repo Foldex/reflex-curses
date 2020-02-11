@@ -37,9 +37,167 @@ Default is to append to your current followed list, add --overwrite to replace i
 \fINOTE:\fR Currently limited to the results_limit (default: 75), large lists might not fully import.
 .SH FILES
 Files are saved on exit, be careful when manually editing.
-.IP ~/.config/reflex-curses/config
+.IP \fB~/.config/reflex-curses/config\fR
 Configuration settings
-.IP ~/.config/reflex-curses/followed
+.IP \fB~/.config/reflex-curses/followed\fR
 Locally followed channels
 .SH CONFIG
-todo
+.SS [keys]
+.TP
+\fBadd\fR (default: a)
+.br
+Adds a twitch channel to your local follow list.
+.br
+If viewing the followed list, show all followed channels.
+.TP
+\fBchat\fR (default: c)
+Opens up chat using \fBchat_method\fR.
+.TP
+\fBdelete\fR (default: d)
+Deletes selected twitch channel from your followed list.
+.TP
+\fBfollowed\fR (default: f)
+Go to followed channels view.
+.TP
+\fBgame\fR (default: g)
+Search for a game name (exact only).
+.TP
+\fBback\fR (default: h)
+Go back to previous view.
+.TP
+\fBimport\fR (default: i)
+Import followed list from a twitch account.
+.TP
+\fBdown\fR (default: j)
+Move the cursor down.
+.TP
+\fBup\fR (default: k)
+Move the cursor up.
+.TP
+\fBforward\fR (default: l)
+Launch a stream or enter into sub-menu.
+.TP
+\fBonline\fR (default: o)
+If viewing the followed list, only show streams that are currently live.
+.TP
+\fBquit\fR (default: q)
+Quit reflex-curses.
+.TP
+\fBrefresh\fR (default: r)
+Refresh current page.
+.TP
+\fBt_streams\fR (default: s)
+Go to top streams view.
+.TP
+\fBt_game\fR (default: t)
+Go to top games view.
+.TP
+\fBsearch\fR (default: /)
+General Search.
+.TP
+\fBvods\fR (default: v)
+Go to vods view for channel.
+.TP
+\fByank\fR (default: y)
+Copy channel url to clipboard
+.br
+\fINOTE\fR: Requires xclip.
+.TP
+\fBpage+\fR (default: n)
+Go to next page of results.
+.TP
+\fBpage-\fR (default: p)
+Go to previous page of results.
+.TP
+\fBqual+\fR (default: =)
+Increase stream quality for launched streams.
+.TP
+\fBqual-\fR (default: -)
+Decrease stream quality for launched streams.
+.SS [exec]
+.TP
+\fBbrowser\fR (default: firefox)
+Browser to use to open chat if \fBchat_method\fR is set to browser.
+.TP
+\fBbrowser_flag\fR (default: --new-window)
+A single flag to pass to the browser.
+.TP
+\fBchat_method\fR (default: browser)
+\fBSupported Values\fR: browser, weechat, irssi.
+.br
+Select which method to open twitch chat with.
+.TP
+\fBplayer\fR (default: mpv)
+Media player used for launching streams.
+.TP
+\fBterm\fR (default: urxvt)
+Terminal used to open chat in weechat/irssi.
+.TP
+\fBterm_flag\fR (default: -e)
+A single flag to pass to the terminal.
+.br
+\fINOTE\fR: Flag varies by terminal.
+.SS [twitch]
+.TP
+\fBclient_id\fR (default: caozjg12y6hjop39wx996mxn585yqyk)
+.br
+Twitch API ID used for requests.
+.TP
+\fBlang\fR (default: "")
+Filter streams by language (e.g. "en" for english streams).
+.br
+Leave blank for all languages.
+.br
+\fINOTE\fR: Only works on game search.
+.TP
+\fBresults_limit\fR (default: 75)
+Maximum amount of results to return.
+.br
+Twitch API limit: 100
+.TP
+\fBretry_limit\fR (default: 3)
+Maximum amount of times to retry a failed request.
+.SS [ui]
+.TP
+\fBdefault_state\fR (default: games)
+\fBSupported Values\fR: games, followed, streams
+.br
+Default view to show on startup.
+.TP
+\fBhl_color\fR (default: blue)
+\fBSupported Values\fR: black, blue, cyan, green, magenta, white, yellow, red
+.br
+Color of currently selected item.
+.TP
+\fBl_win_color\fR (default: white)
+\fBSupported Values\fR: black, blue, cyan, green, magenta, white, yellow, red
+.br
+Color of left window, used for displaying results.
+.TP
+\fBr_win_color\fR (default: green)
+\fBSupported Values\fR: black, blue, cyan, green, magenta, white, yellow, red
+.br
+Color of right window, used for displaying further information.
+.TP
+\fBquality\fR (default: best)
+\fBSupported Values\fR: audio_only, worst, 360p, 480p, 720p, best
+.br
+Default quality for launched streams.
+.TP
+\fBshow_borders\fR (default: True)
+Display borders around left and right window.
+.TP
+\fBshow_keys\fR (default: True)
+Display keybinds in bottom right.
+.SS [irc]
+.TP
+\fBaddress\fR (default: irc.chat.twitch.tv)
+Address of twitch IRC server.
+.TP
+\fBnetwork\fR (default: reflex)
+Name of the saved irc network in the irc client.
+.TP
+\fBport\fR (default: 6697)
+Port for the twitch IRC server.
+.SH BUGS
+Report bugs at https://github.com/foldex/reflex-curses
