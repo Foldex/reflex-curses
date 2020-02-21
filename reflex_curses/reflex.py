@@ -4,6 +4,7 @@
 
 import configparser
 import curses
+import shlex
 import sys
 from os import path, makedirs
 from random import randint
@@ -54,12 +55,11 @@ class Config:
         }
 
         self.cp["exec"] = {
-            "browser": "firefox",
-            "browser_flag": "--new-window",
+            "browser": "firefox --new-window",
             "chat_method": "browser",  # browser/weechat/irc
-            "player": "mpv",
-            "term": "urxvt",
-            "term_flag": "-e",
+            "player": "mpv --force-window=yes",
+            "streamlink": "streamlink -t '{author} - {title}' --twitch-disable-hosting",
+            "term": "urxvt -e",
         }
 
         self.cp["twitch"] = {
@@ -579,21 +579,19 @@ class Keybinds:
                 else:
                     url = ui.cur_page[ui.sel]["url"]
 
-                Popen(
-                    [
-                        "setsid",  # don't close mpv if reflex is closed
-                        "streamlink",
-                        "-Q",
-                        "--twitch-disable-hosting",
-                        "--http-header",
-                        "Client-ID=" + config.cp["twitch"]["client_id"],
-                        "-t {author} - {title}",
-                        "-p",
-                        config.cp["exec"]["player"],
-                        url,
-                        ui.quality[ui.cur_quality],
-                    ]
+                # streamlink expects the player to be a single quoted arg
+                # change single quotes so they don't break shlex's splitting
+                player = config.cp["exec"]["player"].replace("'", '"')
+                cmd = (
+                    f"setsid "  # detach process from terminal
+                    f"{config.cp['exec']['streamlink']} -Q "
+                    f"--http-header Client-ID={config.cp['twitch']['client_id']} "
+                    f"-p '{player}' "
+                    f"{url} {ui.quality[ui.cur_quality]}"
                 )
+
+                Popen(shlex.split(cmd))
+
             elif ui.state == "top":
                 twitch.request(["game", ui.cur_page[ui.sel]["game"]["name"]], "search")
 
@@ -686,7 +684,6 @@ class Keybinds:
                 twitch.query = ["channel", ",".join(config.followed.values())]
                 user_input.request.refresh()
 
-
     class Request:
         """Keys used to query twitch"""
 
@@ -754,56 +751,49 @@ class Keybinds:
                 return
 
             if config.cp["exec"]["chat_method"] == "browser":
+                cmd = (
+                    f"{config.cp['exec']['browser']} "
+                    f"https://twitch.tv/popout/{ui.cur_page[ui.sel]['channel']['name']}/chat"
+                )
+
                 Popen(
-                    [
-                        config.cp["exec"]["browser"],
-                        config.cp["exec"]["browser_flag"],
-                        f"https://twitch.tv/popout/{ui.cur_page[ui.sel]['channel']['name']}/chat",
-                    ],
-                    stdout=DEVNULL,
-                    stderr=DEVNULL,
+                    shlex.split(cmd), stdout=DEVNULL, stderr=DEVNULL,
                 )
             elif config.cp["exec"]["chat_method"] == "weechat":
                 # TODO Allow login via account oauth
                 num = randint(1000000, 99999999)
                 nick = f"justinfan{num}"
-                Popen(
-                    [
-                        config.cp["exec"]["term"],
-                        config.cp["exec"]["term_flag"],
-                        "weechat",
-                        "-r",
-                        (
-                            f'/server add {config.cp["irc"]["network"]} '
-                            f'{config.cp["irc"]["address"]}/{config.cp["irc"]["port"]};'
-                            '/set irc.server.{config.cp["irc"]["network"]}.command '
-                            "/quote CAP REQ :twitch.tv/membership;"
-                            f'/set irc.server.{config.cp["irc"]["network"]}.nicks {nick};'
-                            f'/set irc.server.{config.cp["irc"]["network"]}.username {nick};'
-                            f'/set irc.server.{config.cp["irc"]["network"]}.realname {nick};'
-                            # Setting autojoin is kind of hacky
-                            # It will overwrite the saved setting for the network
-                            # TODO Alternatives for cleaner joining?
-                            f'/set irc.server.{config.cp["irc"]["network"]}.autojoin '
-                            f'#{ui.cur_page[ui.sel]["channel"]["name"]};'
-                            f'/connect {config.cp["irc"]["network"]}'
-                        ),
-                    ]
+                network = config.cp["irc"]["network"]
+
+                cmd = (
+                    f"{config.cp['exec']['term']} "
+                    "weechat -r '"
+                    f"/server add {network} "
+                    f"{config.cp['irc']['address']}/{config.cp['irc']['port']};"
+                    f"/set irc.server.{network}.command "
+                    "/quote CAP REQ :twitch.tv/membership;"
+                    f"/set irc.server.{network}.ssl on;"
+                    f"/set irc.server.{network}.nicks {nick};"
+                    f"/set irc.server.{network}.username {nick};"
+                    f"/set irc.server.{network}.realname {nick};"
+                    # Setting autojoin is kind of hacky
+                    # It will overwrite the saved setting for the network
+                    # TODO Alternatives for cleaner joining?
+                    f"/set irc.server.{network}.autojoin "
+                    f"#{ui.cur_page[ui.sel]['channel']['name']};"
+                    f"/connect {network}'"
                 )
+
+                Popen(shlex.split(cmd))
             elif config.cp["exec"]["chat_method"] == "irssi":
                 # Irssi doesn't seem to support running commands from args
                 # And editing irssi's config file itself seems messy
                 # The best we could do is join an existing network
                 # and copy the join command to clipboard
-                Popen(
-                    [
-                        config.cp["exec"]["term"],
-                        config.cp["exec"]["term_flag"],
-                        "irssi",
-                        "-c",
-                        config.cp["irc"]["network"],
-                    ]
-                )
+                cmd = f"{config.cp['exec']['term']} irssi -c {config.cp['irc']['network']}"
+
+                Popen(shlex.split(cmd))
+
                 clip = Popen(["xclip", "-selection", "c"], stdin=PIPE)
                 clip.communicate(
                     input=bytes("/join #" + ui.cur_page[ui.sel]["channel"]["name"], "utf-8")
