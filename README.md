@@ -70,9 +70,7 @@ Fork of [twitch-curses](https://gitlab.com/corbie/twitch-curses) with added feat
 ## External
 
 - streamlink (launching streams)
-- mpv (default player)
 - xclip (clipboard support)
-- urxvt (default terminal)
 - setsid (detach player from terminal)
 
 <a id="opt_dep"></a>
@@ -80,7 +78,9 @@ Fork of [twitch-curses](https://gitlab.com/corbie/twitch-curses) with added feat
 ## Optional
 
 - firefox (default browser)
-- weechat / irssi (chat)
+- mpv (default player)
+- urxvt (default terminal)
+- weechat / irssi (irc)
 
 <a id="install"></a>
 
@@ -242,12 +242,11 @@ qual+ = =
 qual- = -
 
 [exec]
-browser = firefox
-browser_flag = --new-window
+browser = firefox --new-window
 chat_method = browser
-player = mpv
-term = urxvt
-term_flag = -e
+player = mpv --force-window=yes
+streamlink = streamlink -t '{author} - {title}' --twitch-disable-hosting 
+term = urxvt -e
 
 [twitch]
 client_id = caozjg12y6hjop39wx996mxn585yqyk

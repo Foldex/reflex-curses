@@ -116,25 +116,27 @@ Increase stream quality for launched streams.
 Decrease stream quality for launched streams.
 .SS [exec]
 .TP
-\fBbrowser\fR (default: firefox)
+\fBbrowser\fR (default: firefox --new-window)
 Browser to use to open chat if \fBchat_method\fR is set to browser.
-.TP
-\fBbrowser_flag\fR (default: --new-window)
-A single flag to pass to the browser.
 .TP
 \fBchat_method\fR (default: browser)
 \fBSupported Values\fR: browser, weechat, irssi.
 .br
 Select which method to open twitch chat with.
 .TP
-\fBplayer\fR (default: mpv)
-Media player used for launching streams.
+\fBplayer\fR (default: mpv --force-window=yes)
+Media player used for playing streams.
+.br
+\fINOTE\fR: force-window is set by default to handle audio_only streams.
 .TP
-\fBterm\fR (default: urxvt)
+\fBstreamlink\fR (default: streamlink -t '{author} - {title}' --twitch-disable-hosting)
+Streamlink executable used for launching streams.
+.br
+\fINOTE\fR: twitch-disable-hosting is set by default so that streamlink will
+not open a hosted channel instead of the original.
+.TP
+\fBterm\fR (default: urxvt -e)
 Terminal used to open chat in weechat/irssi.
-.TP
-\fBterm_flag\fR (default: -e)
-A single flag to pass to the terminal.
 .br
 \fINOTE\fR: Flag varies by terminal.
 .SS [twitch]
