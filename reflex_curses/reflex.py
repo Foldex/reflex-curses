@@ -16,6 +16,8 @@ from urllib.parse import quote, unquote
 
 import requests
 
+VERSION = "0.9.1"
+
 
 class Config:
     """Configuration Variables and Locally Followed Twitch Channels."""
@@ -932,6 +934,7 @@ class CLI:
             "-h": self.display_help,
             "--help": self.display_help,
             "-i": self.import_user_follows,
+            "-v": self.version,
         }
 
     def arg_run(self):
@@ -966,6 +969,8 @@ OPTIONS
               Default is to append to your current followed list, add --overwrite to replace it.
               NOTE: Currently limited to the results_limit (default: 75), large followed lists
                     might not fully import.
+
+       -v     Print version
         """
         )
 
@@ -1032,6 +1037,10 @@ OPTIONS
             config.write_followed_list()
         else:
             print(f"Followed list for {sys.argv[2]} not found.")
+
+    def version(self):
+        """Prints version number"""
+        print(f"{VERSION}")
 
 
 def main():
