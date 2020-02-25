@@ -82,9 +82,10 @@ class Config:
         }
 
         self.cp["irc"] = {
-            "address": "irc.chat.twitch.tv",  # Address of the irc server
+            "address": "irc.chat.twitch.tv",  # Address of the irc server, weechat only
             "network": "reflex",  # Name of the saved network
-            "port": "6697",  # Port of the irc server
+            "no_account": "True",  # Use a random justinfan nick to connect, weechat only
+            "port": "6697",  # Port of the irc server, weechat only
         }
 
         # Read in Config File
@@ -756,14 +757,19 @@ class Keybinds:
                     f"https://twitch.tv/popout/{ui.cur_page[ui.sel]['channel']['name']}/chat"
                 )
 
-                Popen(
-                    shlex.split(cmd), stdout=DEVNULL, stderr=DEVNULL,
-                )
+                Popen(shlex.split(cmd), stdout=DEVNULL, stderr=DEVNULL)
             elif config.cp["exec"]["chat_method"] == "weechat":
-                # TODO Allow login via account oauth
-                num = randint(1000000, 99999999)
-                nick = f"justinfan{num}"
                 network = config.cp["irc"]["network"]
+
+                if config.cp.getboolean("irc", "no_account"):
+                    num = randint(1000000, 99999999)
+                    nicks = (
+                        f"/set irc.server.{network}.nicks justinfan{num};"
+                        f"/set irc.server.{network}.username justinfan{num};"
+                        f"/set irc.server.{network}.realname justinfan{num};"
+                    )
+                else:
+                    nicks = ""
 
                 cmd = (
                     f"{config.cp['exec']['term']} "
@@ -773,9 +779,7 @@ class Keybinds:
                     f"/set irc.server.{network}.command "
                     "/quote CAP REQ :twitch.tv/membership;"
                     f"/set irc.server.{network}.ssl on;"
-                    f"/set irc.server.{network}.nicks {nick};"
-                    f"/set irc.server.{network}.username {nick};"
-                    f"/set irc.server.{network}.realname {nick};"
+                    f"{nicks}"
                     # Setting autojoin is kind of hacky
                     # It will overwrite the saved setting for the network
                     # TODO Alternatives for cleaner joining?
