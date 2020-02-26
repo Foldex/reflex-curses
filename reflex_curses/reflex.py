@@ -959,10 +959,10 @@ OPTIONS
        -d channel_name
               Delete a twitch channel from your followed list
 
+       -f     Prints out any followed streams that are online.
+
        -h, --help
               Print help message
-
-       -f     Prints out any followed streams that are online.
 
        -i channel_name (--overwrite)
               Import channels followed by channel_name into your followed list.

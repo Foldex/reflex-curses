@@ -23,11 +23,11 @@ Add a twitch channel to your followed list
 \fB\-d\fR \fBchannel_name\fR
 Delete a twitch channel from your followed list
 .TP
-\fB\-h, --help\fR
-Print help message
-.TP
 \fB\-f\fR
 Prints out any followed streams that are online.
+.TP
+\fB\-h, --help\fR
+Print help message
 .TP
 \fB\-i\fR \fBchannel_name\fR \fB(\-\-overwrite)\fR
 Import channels followed by channel_name into your followed list.
@@ -35,6 +35,9 @@ Import channels followed by channel_name into your followed list.
 Default is to append to your current followed list, add --overwrite to replace it.
 .br
 \fINOTE:\fR Currently limited to the results_limit (default: 75), large lists might not fully import.
+.TP
+\fB\-v\fR
+Print version
 .SH FILES
 Files are saved on exit, be careful when manually editing.
 .IP \fB~/.config/reflex-curses/config\fR
@@ -195,11 +198,20 @@ Display keybinds in bottom right.
 .TP
 \fBaddress\fR (default: irc.chat.twitch.tv)
 Address of twitch IRC server.
+.br
+\fINOTE:\fR Weechat only
 .TP
 \fBnetwork\fR (default: reflex)
 Name of the saved irc network in the irc client.
 .TP
+\fBno_account\fR (default: True)
+Connect to twitch without an account via justinfan nick.
+.br
+\fINOTE:\fR Weechat only
+.TP
 \fBport\fR (default: 6697)
 Port for the twitch IRC server.
+.br
+\fINOTE:\fR Weechat only
 .SH BUGS
 Report bugs at https://github.com/foldex/reflex-curses

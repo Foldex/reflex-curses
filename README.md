@@ -22,6 +22,9 @@
   - [Misc List](#misc_keys)
 - [Configuration](#config)
   - [Config File](#conf_file)
+  - [IRC](#irc)
+	- [Weechat](#weechat)
+	- [Irssi](#irssi)
   - [Followed List Import](#follow_import)
 
 <a id="desc"></a>
@@ -122,16 +125,20 @@ OPTIONS
        -d channel_name
               Delete a twitch channel from your followed list
 
+       -f     Prints out any followed streams that are online.
+
        -h, --help
               Print help message
-
-       -f     Prints out any followed streams that are online.
 
        -i channel_name (--overwrite)
               Import channels followed by channel_name into your followed list.
               Default is to append to your current followed list, add --overwrite to replace it.
               NOTE: Currently limited to the results_limit (default: 75), large lists might not fully import.
+
+       -v     Print version
 ```
+
+More info available from the man page: `man reflex-curses`
 
 An example dmenu script is [Here](./scripts/dmenu_streams.sh)
 
@@ -266,8 +273,48 @@ show_keys = True
 [irc]
 address = irc.chat.twitch.tv
 network = reflex
+no_account = True
 port = 6697
 ```
+
+<a id="irc"></a>
+
+## IRC
+
+Reflex will by default connect to the saved network `reflex`.
+
+To connect to twitch irc, you must either connect with the nick
+`justinfanRANDOMNUMBERHERE` or use an [OAUTH Token](https://twitchapps.com/tmi/)
+for your account.
+
+For more info, see the [Twitch IRC
+Documentation](https://dev.twitch.tv/docs/irc/guide)
+
+<a id="weechat"></a>
+
+### Weechat
+
+If you are connecting with weechat and using `no_account`, no configuration
+should be necessary, as reflex can add the network itself through launch arguments.
+
+If using an account, see the above section on getting your oauth token and add
+it to your saved network.
+
+NOTE: Reflex uses `irc.server.network_name.autojoin` in order to automatically
+connect to a channel when launched. It will overwrite the variable should it
+exist.
+
+<a id="irssi"></a>
+
+### Irssi
+
+Irssi unfortunately does not appear to support running commands through launch
+arguments, so support is much more limited in comparison. Only the `network`
+option is supported at this time. Launching chat will also only copy the join
+command to your clipboard instead of automatically joining the channel.
+
+If using an account, see the above section on getting your oauth token and add
+it to your saved network.
 
 <a id="follow_import"></a>
 
