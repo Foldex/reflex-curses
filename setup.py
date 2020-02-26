@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-reflex_version="0.9.1"
+reflex_version="0.9.2"
 
 reflex_classifiers=[
     'Environment :: Console :: Curses',
