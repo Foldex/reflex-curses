@@ -516,6 +516,8 @@ class Keybinds:
             config.cp["keys"]["page-"]: self.nav.page_prev,
             config.cp["keys"]["up"]: self.nav.up,
             chr(curses.KEY_ENTER): self.nav.forward,
+            chr(10): self.nav.forward,
+            chr(13): self.nav.forward,
             config.cp["keys"]["qual+"]: self.quality.qual_next,
             config.cp["keys"]["qual-"]: self.quality.qual_prev,
             config.cp["keys"]["add"]: self.follow.add,
