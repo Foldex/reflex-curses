@@ -538,7 +538,7 @@ class Keybinds:
 
     def input(self):
         """Gets the pressed key, then calls the respective function."""
-        self.cur_key = ui.screen.getkey()
+        self.cur_key = chr(ui.screen.getch())
 
         # Disable input while term is too small
         if ui.check_term_size() and self.cur_key != chr(curses.KEY_RESIZE):
