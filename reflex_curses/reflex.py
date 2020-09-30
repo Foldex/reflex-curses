@@ -60,7 +60,7 @@ class Config:
             "browser": "firefox --new-window",
             "chat_method": "browser",  # browser/weechat/irc
             "player": "mpv --force-window=yes",
-            "streamlink": "streamlink -t '{author} - {title}' --twitch-disable-hosting",
+            "streamlink": "streamlink -t '{author} - {title}' --twitch-disable-hosting --twitch-disable-ads",
             "term": "urxvt -e",
         }
 
