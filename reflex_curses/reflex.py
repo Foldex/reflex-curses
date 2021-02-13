@@ -323,9 +323,6 @@ class Interface:
         self.win_l.erase()
         if config.cp.getboolean("ui", "show_borders"):
             self.win_l.border(0)
-        self.win_l.addnstr(
-            self.size[0] - 2, self.size[1] // 2 - 9, f"page:{self.page + 1}", self.maxlen,
-        )
         index = 0
 
         for i in self.cur_page:
@@ -354,6 +351,10 @@ class Interface:
             else:
                 self.win_l.addnstr(index * 2 + 2, 2, string, self.maxlen, self.hl_3)
             index += 1
+
+        self.win_l.addnstr(
+            self.size[0] - 2, self.size[1] // 2 - 9, f" page:{self.page + 1}", self.maxlen,
+        )
 
         self.draw_win_l_headers()
 
