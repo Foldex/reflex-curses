@@ -27,9 +27,6 @@ class Config:
         self.followed = {}
         self.cp = configparser.ConfigParser()
 
-        # TODO Move followedlist over to configparser?
-        self.init_followed_list()
-
         # Setup Default Values
         self.cp["keys"] = {
             "add": "a",  # Add channel follow / Show all followed
@@ -1078,6 +1075,8 @@ def main():
 config = Config()
 twitch = Query()
 ui = None  # Dummy init for cli invocation
+
+config.init_followed_list()
 
 if len(sys.argv) >= 2:
     cli = CLI()
