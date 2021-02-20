@@ -16,7 +16,7 @@ from urllib.parse import quote, unquote
 
 import requests
 
-VERSION = "0.9.2"
+VERSION = "0.9.3"
 
 
 class Config:
