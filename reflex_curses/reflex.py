@@ -189,7 +189,7 @@ class Interface:
         self.state = "top"
         self.f_filter = "online"
 
-        self.quality = ["audio_only", "worst", "360p", "480p", "720p", "best"]
+        self.quality = ["audio_only", "worst", "360p", "480p", "720p", "1080p", "best"]
         self.cur_quality = self.quality.index(config.cp["ui"]["quality"])
 
         self.cache = 0
