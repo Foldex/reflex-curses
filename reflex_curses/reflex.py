@@ -585,12 +585,18 @@ class Keybinds:
                 # streamlink expects the player to be a single quoted arg
                 # change single quotes so they don't break shlex's splitting
                 player = config.cp["exec"]["player"].replace("'", '"')
+                quality = ui.quality[ui.cur_quality]
+
+                # prefer 60fps streams, but fallback if they aren't available
+                if quality[-1] == 'p':
+                    quality = f"{quality}60,{quality}"
+
                 cmd = (
                     f"setsid "  # detach process from terminal
                     f"{config.cp['exec']['streamlink']} -Q "
                     f"--http-header Client-ID={config.cp['twitch']['client_id']} "
                     f"-p '{player}' "
-                    f"{url} {ui.quality[ui.cur_quality]}"
+                    f"{url} {quality}"
                 )
 
                 Popen(shlex.split(cmd))
