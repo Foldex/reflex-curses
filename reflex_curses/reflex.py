@@ -39,7 +39,7 @@ class Config:
             "down": "j",  # Move cursor down
             "up": "k",  # Move cursor up
             "forward": "l",  # Enter menu or launch stream
-            "online": "o",  # Show only online streams in followed list
+            "online": "o",  # Toggle online/all streams in followed list
             "quit": "q",  # Quit
             "refresh": "r",  # Resend last query
             "t_stream": "s",  # Go to top streams view
@@ -465,11 +465,11 @@ class Interface:
             items = [
                 f"back: {config.cp['keys']['back']}",
                 f"search: {config.cp['keys']['search']}",
-                f"all: {config.cp['keys']['add']}",
                 f"chat: {config.cp['keys']['chat']}",
                 f"delete: {config.cp['keys']['delete']}",
                 f"game: {config.cp['keys']['game']}",
                 f"import: {config.cp['keys']['import']}",
+                f"online/all: {config.cp['keys']['online']}",
                 f"refresh: {config.cp['keys']['refresh']}",
                 f"top streams: {config.cp['keys']['t_stream']}",
                 f"top games: {config.cp['keys']['t_game']}",
@@ -479,10 +479,6 @@ class Interface:
             ]
         else:
             items = []
-
-        if self.state == "follow" and self.f_filter == "all":
-            del items[2]
-            items.insert(5, f"online: {config.cp['keys']['online']}")
 
         length = len(items)
 
@@ -641,12 +637,15 @@ class Keybinds:
         """Keys used to visit or interact with followed channels."""
 
         def follow_view(self):
-            """Go to the followed channels page"""
+            """Go to the followed channels page
+            Or Toggle online/all follows"""
             if (user_input.cur_key == config.cp["keys"]["followed"] and ui.state != "follow") or (
-                user_input.cur_key == config.cp["keys"]["online"] and ui.f_filter == "all"
+                user_input.cur_key == config.cp["keys"]["online"] and ui.state == "follow" and ui.f_filter == "all"
             ):
                 twitch.request(["channel", ",".join(config.followed.values())], "follow")
                 ui.f_filter = "online"
+            elif (user_input.cur_key == config.cp["keys"]["online"] and ui.state == "follow" and ui.f_filter == "online"):
+                ui.f_filter = "all"
 
         def add(self):
             """Add a channel to the followed list

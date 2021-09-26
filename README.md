@@ -193,12 +193,12 @@ An example dmenu script is [Here](./scripts/dmenu_streams.sh)
 
 ## Follow List
 
-| Key       | Description                               |
-|---------  |-----------------------------------------  |
-| a         | Add channel follow / Show all followed    |
-| d         | Delete channel from followed list         |
-| i         | Import follows from twitch user (limited) |
-| o         | Show only online streams in followed list |
+| Key       | Description                                |
+|---------  |------------------------------------------  |
+| a         | Add channel to followed list               |
+| d         | Delete channel from followed list          |
+| i         | Import follows from twitch user (limited)  |
+| o         | Toggle online/all streams in followed list |
 
 <a id="misc_keys"></a>
 
