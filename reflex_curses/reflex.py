@@ -701,7 +701,7 @@ class Keybinds:
 
         def top_streams_view(self):
             """Go to top streams page"""
-            twitch.request(["stream", " "], "search")
+            twitch.request(["topstreams", " "], "search")
 
         def vods_view(self):
             """Go to vods page for channel"""
@@ -870,6 +870,8 @@ class Query:
 
         if req[0] == "topgames":
             url += f"games/top?limit={self.results_limit}"
+        elif req[0] == "topstreams":
+            url += f"streams?limit={self.results_limit}"
         elif req[0] == "game":
             url += f"streams?limit={self.results_limit}&game={req[1]}"
             if config.cp["twitch"]["lang"] != "":
