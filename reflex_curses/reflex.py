@@ -585,7 +585,7 @@ class Keybinds:
 
                 # prefer 60fps streams, but fallback if they aren't available
                 if quality[-1] == 'p':
-                    quality = f"{quality}60,{quality}"
+                    quality = f"{quality}60,{quality}50,{quality}"
 
                 cmd = (
                     f"setsid "  # detach process from terminal
