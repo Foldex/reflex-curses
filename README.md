@@ -1,3 +1,9 @@
+# No longer maintained
+
+Twitch has completed the shutdown for the version of the API that this used. 
+
+As the newer API is much more limited in functionality, I'm no longer maintaining this project.
+
 <p align="center">
   <img src="/reflex.png" title="reflex-curses"/>
 </p>
